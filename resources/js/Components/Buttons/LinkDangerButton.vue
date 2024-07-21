@@ -1,0 +1,18 @@
+<script setup>
+import {Link} from "@inertiajs/vue3"
+import {defineProps} from 'vue';
+
+defineProps({
+    routeName: {
+        type: String,
+    },
+});
+</script>
+<template>
+    <Link
+        :href="routeName"
+        class="inline-flex items-center px-4 py-2 bg-red-500 text-white dark:bg-red-500 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs dark:text-gray-300 uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
+    >
+        <slot />
+    </Link>
+</template>

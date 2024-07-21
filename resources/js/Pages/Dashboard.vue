@@ -1,22 +1,64 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {
+    IoOutlineFlask,
+    CaStethoscope,
+    LiWheelchair, BsPlusSquare,
+} from "@/utils/icons.js";
 </script>
 
 <template>
-    <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-        </template>
+    <AuthenticatedLayout title="Dashboard">
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">You're logged in!</div>
+        <div class="flex flex-wrap">
+            <div class="w-full xl:w-1/4 p-4 cursor-pointer">
+                <div class="bg-indigo-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                    <h4 class="text-lg font-semibold mb-2">Clinical Test</h4>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-indigo-500 text-3xl"><IoOutlineFlask/></span>
+                        </div>
+                        <h2 class="text-4xl font-bold my-0">27</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full xl:w-1/4 p-4 cursor-pointer">
+                <div class="bg-yellow-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                    <h4 class="text-lg font-semibold mb-2">Total Doctors</h4>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-yellow-500 text-3xl"><CaStethoscope/></span>
+                        </div>
+                        <h2 class="text-4xl font-bold my-0">27</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full xl:w-1/4 p-4 cursor-pointer">
+                <div class="bg-blue-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                    <h4 class="text-lg font-semibold mb-2">Total Patients</h4>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-blue-500 text-3xl"><LiWheelchair/></span>
+                        </div>
+                        <h2 class="text-4xl font-bold my-0">67</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full xl:w-1/4 p-4 cursor-pointer">
+                <div class="bg-green-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                    <h4 class="text-lg font-semibold mb-2">Today's Appointments</h4>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-green-500 text-3xl">
+                                <BsPlusSquare/>
+                            </span>
+                        </div>
+                        <h2 class="text-4xl font-bold my-0">27</h2>
+                    </div>
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>
