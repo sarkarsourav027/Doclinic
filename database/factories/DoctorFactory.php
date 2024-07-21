@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\DaysOfWeek;
+use App\Enums\DoctorType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,14 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'doctor_type' => $this->faker->randomElement(DoctorType::class),
+            'name' => fake()->name(),
+            'phone_number' => fake()->phoneNumber(),
+            'available_days' => [
+                $this->faker->randomElement(DaysOfWeek::getValues()),
+                $this->faker->randomElement(DaysOfWeek::getValues()),
+                $this->faker->randomElement(DaysOfWeek::getValues())
+            ],
         ];
     }
 }

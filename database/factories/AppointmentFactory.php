@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Doctor;
+use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,9 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'doctor_id' => Doctor::inRandomOrder()->first()->id,
+            'patient_id' => Patient::inRandomOrder()->first()->id,
+            'appointment_date' => Carbon::now()->addDays(rand(0, 5))->format('Y-m-d'),
         ];
     }
 }

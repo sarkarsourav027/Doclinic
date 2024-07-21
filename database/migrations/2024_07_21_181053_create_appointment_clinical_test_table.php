@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctors', function (Blueprint $table) {
+        Schema::create('appointment_clinical_test', function (Blueprint $table) {
             $table->id();
-            $table->string('doctor_type')->nullable();
-            $table->string('name');
-            $table->string('phone_number');
-            $table->longText('available_days')->nullable();
-            $table->text('avatar')->nullable();
+            $table->foreignId('appointment_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('clinical_test_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('appointment_clinical_test');
     }
 };

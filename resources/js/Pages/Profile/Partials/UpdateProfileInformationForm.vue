@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import Spinner from "@/Components/Spinner.vue";
 
 defineProps({
     mustVerifyEmail: {
@@ -86,7 +87,14 @@ const form = useForm({
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                    class="ms-4"
+                >
+                    <Spinner v-if="form.processing"/>
+                    Save
+                </PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

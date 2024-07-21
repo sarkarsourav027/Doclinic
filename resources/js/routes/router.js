@@ -9,16 +9,16 @@ import {reactive} from "vue";
 // Create the reactive array with the correct type
 const navigation = reactive([
     {
-        route: "dashboard",
+        route: "dashboard.index",
         label: "Dashboard",
         component: 'dashboard',
         icon: RaDashboard,
         isOpen: false
     },
     {
-        route: "test.index",
-        label: "Test",
-        component: 'test',
+        route: "clinical-test.index",
+        label: "Clinical Test",
+        component: 'clinical-test',
         icon: IoOutlineFlask,
         isOpen: false
     },

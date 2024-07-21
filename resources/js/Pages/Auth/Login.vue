@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Spinner from "@/Components/Spinner.vue";
 
 defineProps({
     canResetPassword: {
@@ -85,7 +86,13 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton
+                    id="login"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                    class="ms-4"
+                >
+                    <Spinner v-if="form.processing"/>
                     Log in
                 </PrimaryButton>
             </div>
