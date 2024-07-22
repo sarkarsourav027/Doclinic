@@ -51,7 +51,7 @@ class DoctorController extends Controller
     public function store(StoreDoctorRequest $request)
     {
         $request['available_days'] = collect($request->input('available_days'))->pluck('name')->toArray();
-        Doctor::create($request->only(['doctor_type','name','phone_number','available_days']));
+        Doctor::create($request->only(['doctor_type','name','phone_number','available_days','fees']));
         return redirect()->route('doctor.index');
     }
 
@@ -86,7 +86,7 @@ class DoctorController extends Controller
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
         $request['available_days'] = collect($request->input('available_days'))->pluck('name')->toArray();
-        $doctor->update($request->only(['doctor_type','name','phone_number','available_days']));
+        $doctor->update($request->only(['doctor_type','name','phone_number','available_days','fees']));
         return redirect()->route('doctor.index');
     }
 

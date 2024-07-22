@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone_number');
             $table->longText('available_days')->nullable();
+            $table->decimal('fees',18,2);
             $table->text('avatar')->nullable();
             $table->timestamps();
         });

@@ -9,7 +9,7 @@ class Doctor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_type', 'name', 'phone_number', 'available_days', 'avatar'];
+    protected $fillable = ['doctor_type', 'name', 'phone_number', 'available_days','fees', 'avatar'];
     protected $casts = [
         'available_days' => 'array'
     ];

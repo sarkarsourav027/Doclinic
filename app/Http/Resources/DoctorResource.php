@@ -20,6 +20,7 @@ class DoctorResource extends JsonResource
             'name' => $this->when($this->name, $this->name),
             'phone_number' => $this->when($this->phone_number, $this->phone_number),
             'available_days' => $this->when($this->available_days, $this->available_days),
+            'fees' => $this->when($this->fees, $this->fees),
             'avatar' => $this->when($this->avatar, $this->avatar),
             'created_at' => $this->when($this->created_at, $this->created_at)
         ];

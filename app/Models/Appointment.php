@@ -11,15 +11,16 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_id', 'patient_id', 'appointment_date'];
+    protected $fillable = ['appointment_id','doctor_id', 'patient_id', 'appointment_date'];
     protected $casts = [
-        'appointment_date' => 'date:Y-md'
+        'appointment_date' => 'date:Y-m-d'
     ];
 
     public function scopeFilter($query, array $filters): void
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->orWhereHas('doctor', function ($query) use ($search) {
+            $query->where('appointment_id', 'like', '%' . $search . '%')
+            ->orWhereHas('doctor', function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })->orWhereHas('patient', function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');

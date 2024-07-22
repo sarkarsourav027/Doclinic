@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Models\Doctor;
+use App\Models\Patient;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class AppointmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $appointment = Appointment::query()
+            ->with(['patient', 'doctor', 'clinicalTests'])
+            ->latest()
+            ->filter($request->only('search'))
+            ->paginate(config('basicSetting.paginate'))
+            ->withQueryString();
+        return Inertia::render('Appointment/AppointmentIndex', [
+            'appointment' => AppointmentResource::collection($appointment),
+            'filters' => $request->only('search')
+        ]);
     }
 
     /**
@@ -21,7 +36,12 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        $doctors = Doctor::query()->latest()->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => ['id' => $id, 'name' => $name]];
+        })->values();
+        return Inertia::render('Appointment/AppointmentForm', [
+            'doctors' => $doctors,
+        ]);
     }
 
     /**
@@ -29,7 +49,25 @@ class AppointmentController extends Controller
      */
     public function store(StoreAppointmentRequest $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            $patient = Patient::firstOrCreate(
+                [
+                    'name' => $request->input('name'),
+                    'phone_number' => $request->input('phone_number'),
+                ],
+                [
+                    'patient_id'=>substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
+                ]
+            );
+
+            Appointment::create([
+                'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
+                'doctor_id' => $request->input('doctor_id')['id'],
+                'patient_id' => $patient->id,
+                'appointment_date' => $request->input('appointment_date')
+            ]);
+        });
+        return redirect()->route('appointment.index');
     }
 
     /**
@@ -45,7 +83,14 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
-        //
+        $appointment->load(['patient','doctor']);
+        $doctors = Doctor::query()->latest()->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => ['id' => $id, 'name' => $name]];
+        })->values();
+        return Inertia::render('Appointment/AppointmentForm', [
+            'appointment' => AppointmentResource::make($appointment),
+            'doctors' => $doctors,
+        ]);
     }
 
     /**
@@ -53,7 +98,22 @@ class AppointmentController extends Controller
      */
     public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
-        //
+        DB::transaction(function () use ($request,$appointment) {
+            $patient = Patient::firstOrCreate(
+                [
+                    'name' => $request->input('name'),
+                    'phone_number' => $request->input('phone_number'),
+                ]
+            );
+
+            Appointment::create([
+                'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
+                'doctor_id' => $request->input('doctor_id')['id'],
+                'patient_id' => $patient->id,
+                'appointment_date' => $request->input('appointment_date')
+            ]);
+        });
+        return redirect()->route('appointment.index');
     }
 
     /**

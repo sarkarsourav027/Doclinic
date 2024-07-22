@@ -26,6 +26,7 @@ class StoreDoctorRequest extends FormRequest
             'name'=>'required|string',
             'phone_number'=>'required|string|max_digits:10|min_digits:10',
             'available_days'=>'required|array',
+            'fees'=>'required|numeric',
         ];
     }
 }

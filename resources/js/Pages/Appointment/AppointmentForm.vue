@@ -9,27 +9,21 @@ import {BxArrowBack} from "@/utils/icons.js"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Spinner from "@/Components/Spinner.vue";
 import VueMultiselect from 'vue-multiselect'
-import SelectInput from "@/Components/SelectInput.vue";
 const props = defineProps({
-    doctor: {
+    appointment: {
         type: Object,
         require: true,
     },
-    doctorTypes: {
-        type: Object,
-        require: true,
-    },
-    daysOfWeek: {
+    doctors: {
         type: Object,
         require: true,
     },
 })
-const form = useForm(props?.doctor?.data?.id ? "put" : "post", props?.doctor?.data?.id ? route("doctor.update", {doctor: props?.doctor?.data?.id}) : route("doctor.store"), {
-    name: props?.doctor?.data?.name ?? '',
-    phone_number: props?.doctor?.data?.phone_number ?? '',
-    available_days: props?.doctor?.data?.available_days?.map(value => ({id: value, name: value})) ?? '',
-    doctor_type: props?.doctor?.data?.doctor_type ?? '',
-    fees: props?.doctor?.data?.fees ?? '',
+const form = useForm(props?.appointment?.data?.id ? "put" : "post", props?.appointment?.data?.id ? route("appointment.update", {appointment: props?.appointment?.data?.id}) : route("appointment.store"), {
+    name: props?.appointment?.data?.patient?.name ?? '',
+    phone_number: props?.appointment?.data?.patient?.phone_number ?? '',
+    doctor_id: props?.appointment?.data?.doctor ?? '',
+    appointment_date: props?.appointment?.data?.appointment_date ?? '',
 });
 const nameWithLabel = ({id, name}) => {
     return `${name}`
@@ -38,18 +32,18 @@ const nameWithLabel = ({id, name}) => {
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <template>
-    <AuthenticatedLayout :title="doctor?.data?.id ? 'Update Doctor' : 'Add Doctor'">
+    <AuthenticatedLayout :title="appointment?.data?.id ? 'Update Appointment' : 'Add Appointment'">
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <div class="flex items-center gap-x-3">
                         <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-                            {{ doctor?.data?.id ? 'Update Doctor' : 'Add Doctor' }}</h2>
+                            {{ appointment?.data?.id ? 'Update Appointment' : 'Add Appointment' }}</h2>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-x-3">
-                    <LinkPrimaryButton :route-name="route('doctor.index')">
+                    <LinkPrimaryButton :route-name="route('appointment.index')">
                         <BxArrowBack/>&nbsp;Back
                     </LinkPrimaryButton>
                 </div>
@@ -62,9 +56,9 @@ const nameWithLabel = ({id, name}) => {
                 >
                     <section>
                         <form class="mt-2" @submit.prevent="form.submit()">
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mb-4">
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" for="name" value="Name"/>
+                                    <InputLabel :is-require="true" for="name" value="Patient Name"/>
 
                                     <TextInput
                                         id="name"
@@ -78,7 +72,7 @@ const nameWithLabel = ({id, name}) => {
                                     <InputError :message="form.errors.name" class="mt-2"/>
                                 </div>
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" for="phone_number" value="Phone Number"/>
+                                    <InputLabel :is-require="true" for="phone_number" value="Patient Phone Number"/>
 
                                     <TextInput
                                         id="phone_number"
@@ -91,49 +85,42 @@ const nameWithLabel = ({id, name}) => {
 
                                     <InputError :message="form.errors.phone_number" class="mt-2"/>
                                 </div>
-                                <div class="mb-2">
-                                    <InputLabel :is-require="true" for="fees" value="Fees"/>
-
-                                    <TextInput
-                                        id="fees"
-                                        v-model="form.fees"
-                                        autocomplete="fees"
-                                        autofocus
-                                        class="mt-1 block w-full"
-                                        type="text"
-                                    />
-
-                                    <InputError :message="form.errors.fees" class="mt-2"/>
-                                </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mb-4">
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" for="doctor_type" value="Doctor Type" class="mb-2"/>
-
-                                    <SelectInput v-model="form.doctor_type" :options="doctorTypes" class="w-full cursor-pointer"/>
-
-                                    <InputError :message="form.errors.doctor_type" class="mt-2"/>
-                                </div>
-                                <div class="mb-2">
-                                    <InputLabel :is-require="true" class="mb-2" for="available_days" value="Available Days"/>
+                                    <InputLabel :is-require="true" class="mb-2" for="doctor_id" value="Appointment"/>
                                     <VueMultiselect
-                                        v-model="form.available_days"
+                                        v-model="form.doctor_id"
                                         :custom-label="nameWithLabel"
-                                        :multiple="true"
-                                        :options="daysOfWeek"
+                                        :multiple="false"
+                                        :options="doctors"
                                         label="name"
-                                        placeholder="Select Days"
+                                        placeholder="Select Appointment"
                                         track-by="name"
                                     >
                                     </VueMultiselect>
-                                    <InputError :message="form.errors.available_days" class="mt-2"/>
+                                    <InputError :message="form.errors.doctor_id" class="mt-2"/>
+                                </div>
+                                <div class="mb-2">
+                                    <InputLabel :is-require="true" for="appointment_date" value="Appointment Date" class="mb-2"/>
+
+                                    <TextInput
+                                        id="appointment_date"
+                                        v-model="form.appointment_date"
+                                        autocomplete="appointment_date"
+                                        autofocus
+                                        class="mt-1 block w-full"
+                                        type="date"
+                                    />
+
+                                    <InputError :message="form.errors.appointment_date" class="mt-2"/>
                                 </div>
                             </div>
                             <div class="flex items-center gap-4 mt-4">
                                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                     <spinner v-if="form.processing"/>
                                     {{
-                                        form.processing ? "Please Wait.." : doctor?.data?.id ? "Update Doctor" : "Add Doctor"
+                                        form.processing ? "Please Wait.." : appointment?.data?.id ? "Update Appointment" : "Add Appointment"
                                     }}
                                 </PrimaryButton>
                             </div>

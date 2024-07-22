@@ -20,6 +20,7 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
             'doctor_id' => Doctor::inRandomOrder()->first()->id,
             'patient_id' => Patient::inRandomOrder()->first()->id,
             'appointment_date' => Carbon::now()->addDays(rand(0, 5))->format('Y-m-d'),
