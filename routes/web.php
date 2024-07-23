@@ -10,6 +10,7 @@ use App\Http\Controllers\TestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -30,6 +31,20 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::resource('doctor', DoctorController::class);
     Route::resource('patient', PatientController::class);
     Route::resource('appointment', AppointmentController::class);
+});
+Route::get('pdf',function (){
+//    return view('invoice.invoice');
+    $template = view('invoice.invoice')->render();
+    Browsershot::html($template)
+        ->waitUntilNetworkIdle()
+        ->noSandbox()
+        ->usePipe()
+        ->ignoreHttpsErrors()
+        ->showBackground()
+        ->margins(4, 0, 4, 0)
+         ->landscape()
+//        ->format('A4')
+        ->save(storage_path('/app/reports/example.pdf'));
 });
 
 require __DIR__.'/auth.php';
