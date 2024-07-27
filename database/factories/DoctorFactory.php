@@ -21,7 +21,7 @@ class DoctorFactory extends Factory
         return [
             'doctor_type' => $this->faker->randomElement(DoctorType::class),
             'name' => fake()->name(),
-            'phone_number' => fake()->phoneNumber(),
+            'phone_number' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 10),
             'fees' => $this->faker->randomElement([500,700,800,1000]),
             'available_days' => [
                 $this->faker->randomElement(DaysOfWeek::getValues()),

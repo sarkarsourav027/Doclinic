@@ -56,7 +56,7 @@ class AppointmentController extends Controller
                     'phone_number' => $request->input('phone_number'),
                 ],
                 [
-                    'patient_id'=>substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
+                    'patient_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
                 ]
             );
 
@@ -83,7 +83,7 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
-        $appointment->load(['patient','doctor']);
+        $appointment->load(['patient', 'doctor']);
         $doctors = Doctor::query()->latest()->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
             return [$id => ['id' => $id, 'name' => $name]];
         })->values();
@@ -98,16 +98,18 @@ class AppointmentController extends Controller
      */
     public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
-        DB::transaction(function () use ($request,$appointment) {
+        DB::transaction(function () use ($request, $appointment) {
             $patient = Patient::firstOrCreate(
                 [
                     'name' => $request->input('name'),
                     'phone_number' => $request->input('phone_number'),
+                ],
+                [
+                    'patient_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
                 ]
             );
 
-            Appointment::create([
-                'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
+            $appointment->update([
                 'doctor_id' => $request->input('doctor_id')['id'],
                 'patient_id' => $patient->id,
                 'appointment_date' => $request->input('appointment_date')

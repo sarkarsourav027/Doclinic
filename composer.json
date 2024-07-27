@@ -11,6 +11,8 @@
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "mpdf/mpdf": "^8.2",
+        "rmunate/spell-number": "^1.0",
         "spatie/browsershot": "^4.1",
         "tightenco/ziggy": "^2.0"
     },

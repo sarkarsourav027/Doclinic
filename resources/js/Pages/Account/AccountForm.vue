@@ -8,29 +8,25 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {BxArrowBack} from "@/utils/icons.js"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Spinner from "@/Components/Spinner.vue";
-import VueMultiselect from 'vue-multiselect'
 import SelectInput from "@/Components/SelectInput.vue";
 import {toast} from "vue3-toastify";
+
 const props = defineProps({
-    doctor: {
+    account: {
         type: Object,
         require: true,
     },
-    doctorTypes: {
-        type: Object,
-        require: true,
-    },
-    daysOfWeek: {
+    accountDesignation: {
         type: Object,
         require: true,
     },
 })
-const form = useForm(props?.doctor?.data?.id ? "put" : "post", props?.doctor?.data?.id ? route("doctor.update", {doctor: props?.doctor?.data?.id}) : route("doctor.store"), {
-    name: props?.doctor?.data?.name ?? '',
-    phone_number: props?.doctor?.data?.phone_number ?? '',
-    available_days: props?.doctor?.data?.available_days?.map(value => ({id: value, name: value})) ?? '',
-    doctor_type: props?.doctor?.data?.doctor_type ?? '',
-    fees: props?.doctor?.data?.fees ?? '',
+const form = useForm(props?.account?.data?.id ? "put" : "post", props?.account?.data?.id ? route("account.update", {account: props?.account?.data?.id}) : route("account.store"), {
+    designation: props?.account?.data?.designation ?? '',
+    name: props?.account?.data?.name ?? '',
+    email: props?.account?.data?.email ?? '',
+    phone_number: props?.account?.data?.phone_number ?? '',
+    password: '',
 });
 const nameWithLabel = ({id, name}) => {
     return `${name}`
@@ -40,27 +36,26 @@ const formConfig = {
     preserveScroll: true,
     onSuccess: (page) => {
         form.reset();
-        toast(props?.doctor?.data?.id ? "Doctor updated successfully." : "Doctor added successfully.", {
+        toast(props?.account?.data?.id ? "Account updated successfully." : "Account created successfully.", {
             type: 'success',
         })
     }
 }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <template>
-    <AuthenticatedLayout :title="doctor?.data?.id ? 'Update Doctor' : 'Add Doctor'">
+    <AuthenticatedLayout :title="account?.data?.id ? 'Update Account' : 'Add Account'">
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <div class="flex items-center gap-x-3">
                         <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-                            {{ doctor?.data?.id ? 'Update Doctor' : 'Add Doctor' }}</h2>
+                            {{ account?.data?.id ? 'Update Account' : 'Add Account' }}</h2>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-x-3">
-                    <LinkPrimaryButton :route-name="route('doctor.index')">
+                    <LinkPrimaryButton :route-name="route('account.index')">
                         <BxArrowBack/>&nbsp;Back
                     </LinkPrimaryButton>
                 </div>
@@ -74,6 +69,13 @@ const formConfig = {
                     <section>
                         <form class="mt-2" @submit.prevent="form.submit(formConfig)">
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
+                                <div class="mb-2">
+                                    <InputLabel :is-require="true" class="mb-2" for="designation" value="Designation"/>
+
+                                    <SelectInput v-model="form.designation" :options="accountDesignation"
+                                                 class="w-full"/>
+                                    <InputError :message="form.errors.designation" class="mt-2"/>
+                                </div>
                                 <div class="mb-2">
                                     <InputLabel :is-require="true" for="name" value="Name"/>
 
@@ -89,13 +91,26 @@ const formConfig = {
                                     <InputError :message="form.errors.name" class="mt-2"/>
                                 </div>
                                 <div class="mb-2">
+                                    <InputLabel :is-require="true" for="email" value="Email"/>
+
+                                    <TextInput
+                                        id="phone_number"
+                                        v-model="form.email"
+                                        autocomplete="email"
+                                        autofocus
+                                        class="mt-1 block w-full"
+                                        type="email"
+                                    />
+
+                                    <InputError :message="form.errors.email" class="mt-2"/>
+                                </div>
+                                <div class="mb-2">
                                     <InputLabel :is-require="true" for="phone_number" value="Phone Number"/>
 
                                     <TextInput
                                         id="phone_number"
                                         v-model="form.phone_number"
                                         autocomplete="phone_number"
-                                        autofocus
                                         class="mt-1 block w-full"
                                         type="text"
                                     />
@@ -103,48 +118,25 @@ const formConfig = {
                                     <InputError :message="form.errors.phone_number" class="mt-2"/>
                                 </div>
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" for="fees" value="Fees"/>
+                                    <InputLabel :is-require="true" for="password" value="Password"/>
 
                                     <TextInput
-                                        id="fees"
-                                        v-model="form.fees"
-                                        autocomplete="fees"
+                                        id="password"
+                                        v-model="form.password"
+                                        autocomplete="phone_number"
                                         autofocus
                                         class="mt-1 block w-full"
-                                        type="text"
+                                        type="password"
                                     />
 
-                                    <InputError :message="form.errors.fees" class="mt-2"/>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mb-4">
-                                <div class="mb-2">
-                                    <InputLabel :is-require="true" for="doctor_type" value="Doctor Type" class="mb-2"/>
-
-                                    <SelectInput v-model="form.doctor_type" :options="doctorTypes" class="w-full cursor-pointer"/>
-
-                                    <InputError :message="form.errors.doctor_type" class="mt-2"/>
-                                </div>
-                                <div class="mb-2">
-                                    <InputLabel :is-require="true" class="mb-2" for="available_days" value="Available Days"/>
-                                    <VueMultiselect
-                                        v-model="form.available_days"
-                                        :custom-label="nameWithLabel"
-                                        :multiple="true"
-                                        :options="daysOfWeek"
-                                        label="name"
-                                        placeholder="Select Days"
-                                        track-by="name"
-                                    >
-                                    </VueMultiselect>
-                                    <InputError :message="form.errors.available_days" class="mt-2"/>
+                                    <InputError :message="form.errors.password" class="mt-2"/>
                                 </div>
                             </div>
                             <div class="flex items-center gap-4 mt-4">
                                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                     <spinner v-if="form.processing"/>
                                     {{
-                                        form.processing ? "Please Wait.." : doctor?.data?.id ? "Update Doctor" : "Add Doctor"
+                                        form.processing ? "Please Wait.." : account?.data?.id ? "Update Account" : "Add Account"
                                     }}
                                 </PrimaryButton>
                             </div>

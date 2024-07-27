@@ -2,7 +2,10 @@ import {
     RaDashboard,
     IoOutlineFlask,
     CaStethoscope,
-    LiWheelchair, BsPlusSquare,
+    LiWheelchair,
+    BsPlusSquare,
+    CdAccount,
+    AkCreditCard
 } from "@/utils/icons.js";
 import {reactive} from "vue";
 
@@ -41,6 +44,20 @@ const navigation = reactive([
         label: "Appointment",
         component: 'appointment',
         icon: BsPlusSquare,
+        isOpen: false
+    },
+    {
+        route: "billing.index",
+        label: "Billing",
+        component: 'billing',
+        icon: AkCreditCard,
+        isOpen: false
+    },
+    {
+        route: "account.index",
+        label: "Accounts",
+        component: 'account',
+        icon: CdAccount,
         isOpen: false
     },
     /*{

@@ -6,265 +6,153 @@
     <title>Partner Invoice</title>
 
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        li {
-            list-style: none;
+        .invoice-box {
+            width: 100%;
+            margin: auto;
         }
 
-        .header-part {
-            display: flex;
-            justify-content: flex-end;
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+            border-collapse: collapse;
         }
 
-        .header-address {
-            margin-bottom: 20px;
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .invoice-box table tr td:nth-child(2) {
             text-align: right;
         }
 
-        .header-address img {
-            width: 240px;
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
         }
 
-        .header-address ul li {
-            line-height: 25px;
-            font-size: 15px;
+        .invoice-box table tr.top table td.title {
+            font-size: 45px;
+            line-height: 45px;
+            color: #333;
         }
 
-        .invoice-container {
-            border: 1px solid #ededed;
-            padding: 20px;
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
         }
 
-        .customer-details-invoice {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            margin-bottom: 20px;
-            gap: 0 10px;
+        .invoice-box table tr.heading td {
+            background: #dff4ff;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
         }
 
-        .address h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            border-bottom: 1px solid;
-            display: inline-block;
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
         }
 
-        .address ul li {
-            line-height: 25px;
-            font-size: 15px;
-            font-weight: 500;
+        .invoice-box table tr.item td {
+            border-bottom: .5px solid #eee;
         }
 
-        .address p {
-            font-size: 15px;
-            font-weight: 500;
-            margin-top: 5px;
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
         }
 
-        .customer-invoice table {
+        .invoice-box table tr.total td {
+            border-top: .5px solid #eee;
+        }
+
+        .footer {
+            font-size: 7px;
+            color: #555;
             width: 100%;
-            border-collapse: collapse;
-            background-color: #ededed;
-        }
-
-        .customer-invoice table td {
-            border: 1px solid #555555;
-            border-collapse: collapse;
-            padding: 5px;
-        }
-
-        .tax-invoice {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        .tax-invoice td, th {
-            border: 1px solid #555555;
-            padding: 5px;
-        }
-
-        .subtotal {
-            text-align: right;
-        }
-
-        .footer-part {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background-color: #ededed;
-            padding: 20px;
-            gap: 0 10px;
-        }
-
-        .terms {
-            margin-top: 10px;
-        }
-
-        .terms h4 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .terms ul li {
-            font-size: 15px;
-            line-height: 25px;
-        }
-
-        .file-upload {
-            border: 1px solid #555555;
-            height: 100%;
-            width: 100%;
-        }
-        .new-page-section {
-            page-break-before: always;
+            position: fixed;
+            bottom: -15px;
+            border-top: .5px solid #eee;
         }
     </style>
 </head>
 <body>
-<section class="invoice-section">
-    <div class="invoice-container">
-        <div class="header-part">
-            <div class="header-address">
-                <ul>
-                    <li>PARTY NAME</li>
-                    <li>2F-1, No.130, Nanjing E.Road</li>
-                    <li>Sector -4, Songshan District</li>
-                    <li>Taipei city-105, Taiwan R.O.C</li>
-                    <li> Website: www.intersoftkk.com</li>
-                    <li>Co. Reg No. : 27547926,Tax id - 111309435</li>
-                </ul>
-            </div>
-        </div>
-        <div class="customer-details-invoice">
-            <address class="address">
-                <h2>Customer Name & Address</h2>
-                <ul>
-                    <li>INTERSOFTKK (TAIWAN) PVT. LTD.</li>
-                    <li>2F-1, No.130, Nanjing E.Road</li>
-                    <li>Sector -4, Songshan District</li>
-                    <li> Taipei city-105, Taiwan R.O.C</li>
-                    <li>Website: www.intersoftkk.com</li>
-                    <li>Co. Reg No. : 27547926,Tax id - 111309435</li>
-                    <li>Corporate Tax id -  52490393</li>
-                    <li>VAT ID/GST ID: 52490393</li>
-                    <li>Company code (in SAP): 7490</li>
-                </ul>
-            </address>
-            <div class="customer-invoice">
+<div class='invoice-box'>
+    <table cellpadding='0' cellspacing='0'>
+        <tr class='top'>
+            <td colspan='2'>
                 <table>
-                    <tbody>
                     <tr>
-                        <td>Invoice Date</td>
-                        <td>06-06-2024</td>
+                        <td class='title'>
+                            <img src="{{asset('/assets/logo-letter.png')}}"
+                                 style='width: 100%; max-width: 100px;'>
+                            <p style='font-size:20px;'>TheraConnect</p>
+                        </td>
+                        <td>
+                            <p style='font-size:40px; font-weight:bold; color:#3a86ff;'>INVOICE</p>
+                            {{$invoice_number}}<br>
+                            Date: {{$billing_date}}
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Invoice No.</td>
-                        <td>XXXXXX</td>
-                    </tr>
-                    <tr>
-                        <td>Invoice No.</td>
-                        <td>XXXXXX</td>
-                    </tr>
-                    <tr>
-                        <td>P.O</td>
-                        <td>XXXXXX</td>
-                    </tr>
-                    <tr>
-                        <td>Terms</td>
-                        <td>45 Days</td>
-                    </tr>
-                    <tr>
-                        <td>Due Date</td>
-                        <td>=I8+45</td>
-                    </tr>
-                    </tbody>
                 </table>
-            </div>
-        </div>
-        <table class="tax-invoice">
-            <thead>
-            <tr>
-                <th></th>
-                <th>DESCRIPTION</th>
-                <th>Monthly Rate In INR</th>
-                <th>Service Month</th>
-                <th>AMOUNT (INR)</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for($i=1;$i<2;$i++)
-                <tr>
-                    <td>{{$i}}</td>
-                    <td>Test</td>
-                    <td>Test</td>
-                    <td>Test</td>
-                    <td>Test</td>
-                </tr>
-            @endfor
-            <tr>
-                <td></td>
-                <td>Professional Service Fees</td>
-                <td>XXXX</td>
-                <td>MAY 2024</td>
-                <td>XXXX</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Resource's Name:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="4" class="subtotal">Subtotal</td>
-                <td>=SUM(J21:J30)</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="subtotal">Subtotal</td>
-                <td>=SUM(J21:J30)</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="subtotal">Subtotal</td>
-                <td>=SUM(J21:J30)</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="subtotal">Subtotal</td>
-                <td>=SUM(J21:J30)</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="footer-part new-page-section">
-            <div class="">
-                <address class="address">
-                    <h4>Account Information</h4>
-                    <h2>Mega International Commercial Bank</h2>
-                    <ul>
-                        <li>HSIN YI Branch</li>
-                        <li>No.65, Sector -2, Keelung Road</li>
-                        <li>Taipei, Taiwan 11052</li>
-                        <li>Corporate Account #: 4809014142</li>
-                        <li>A/C Name: Intersoftkk (Taiwan) Pvt Ltd</li>
-                    </ul>
-                    <p>(SWIFT code for NTD: 0170480) (SWIFT code for foreign currency: ICBCTWTP048)</p>
-                </address>
-                <div class="terms">
-                    <h4>Terms & Conditions:</h4>
-                    <ul>
-                        <li>Prices are quoted in Taiwan Dollar (TWD)</li>
-                        <li>Payments to be paid within 30days from the date of invoice</li>
-                        <li>There will be a 1.5% interest charge per month on overdue payments</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="file-upload"></div>
-        </div>
-    </div>
-</section>
+            </td>
+        </tr>
+        <tr class='information'>
+            <td colspan='2'>
+                <table>
+                    <tr>
+                        <td>
+                            <span style='font-weight:bold; color:#3a86ff;'>Bill To:</span><br>
+                            {{$patient_name}}<br>
+                            {{$patient_phone_number}}<br>
+                            @if($patient_email)
+                                {{$patient_email}}<br>
+                            @endif
+                            {{$patient_address}}<br>
+                            Mode of Transaction: {{ucfirst($payment_mode)}}
+                        </td>
+                        <td style='text-align:left; padding-left:200px;'>
+                            <span style='font-weight:bold; color:#3a86ff;'>Bill From:</span><br>
+                            Jasodha Health Clinic<br>
+                            9830619165<br>
+                            jasodahealthcare@gmail.com<br>
+                            Dumdum<br>
+                            GST: 19EJDPS4723L
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class='heading'>
+            <td>Item</td>
+            <td>Amount (₹)</td>
+        </tr>
+        <tr class='total'>
+            <td>Total Test Amount:</td>
+            <td>₹{{number_format($clinical_test_amount, 2)}}</td>
+        </tr>
+        <tr class='total'>
+            <td>GST ({{$gst_percentage}}%):</td>
+            <td>₹{{number_format($gst_amount, 2)}}</td>
+        </tr>
+        <tr class='total'>
+            <td>Total with GST:</td>
+            <td>₹{{ number_format($clinical_test_amount + $gst_amount, 2) }}</td>
+        </tr>
+        <tr class='item'>
+            <td>Doctor Fees ({{$doctor_name}})</td>
+            <td>₹{{$doctor_fees}}</td>
+        </tr>
+        <tr class='total'>
+            <td style='font-size: 15px; color: #3a86ff;'><strong>Net Amount:</strong></td>
+            <td style='font-size: 15px; color: #3a86ff;'><strong>₹{{$billing_amount}}</strong></td>
+        </tr>
+    </table>
+    <p style='font-size:12px; text-align:right;'>{{$billing_amount_in_word}} Rupees
+        Only</p>
+</div>
 </body>
 </html>

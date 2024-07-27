@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+Date: 27-07-2024
+TheraConnect Updated Root Style
+*/
+:root {
+    --primary-text-color: #244c71;
+    --secondary-text-color: #ffffff;
+    --primary-background-color: #3a86ff;
+    --secondary-background-color: #244c71;
+    --danger-background-color: #c90044;
+    --success-background-color: #00b46f;
+}
+
+/* Updated Sidebar Style */
+.sidebar-t {
+    background-color: var(--secondary-background-color);
+    color: var(--secondary-text-color);
+}
+.sidebar-t .selectio-link{
+    background-color: var(--primary-background-color);
+}
+
+/* Updated Text Style */
+.text-primary-t{
+    color: var(--primary-text-color);
+}
+.text-secodary-t{
+    color: var(--secondary-text-color);
+}
+
+/* Updated Background Style */
+.backgroud-primary-t{
+    color: var(--primary-background-color);
+}
+.backgroud-secodary-t{
+    color: var(--secondary-background-color);
+}
+
+/* Updated Button Style */
+.btn-primary-t{
+    background-color: var(--primary-background-color);
+    color: var(--secondary-text-color);
+}
+.btn-secondary-t{
+    background-color: var(--secondary-background-color);
+    color: var(--secondary-text-color);
+}
+/*As per requirement*/
+.btn-success-t{
+    background-color: var(--success-background-color);
+    color: var(--secondary-text-color);
+}
+.btn-danger-t{
+    background-color: var(--danger-background-color);
+    color: var(--secondary-text-color);
+}

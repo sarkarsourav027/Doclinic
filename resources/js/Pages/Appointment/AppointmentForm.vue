@@ -9,6 +9,7 @@ import {BxArrowBack} from "@/utils/icons.js"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Spinner from "@/Components/Spinner.vue";
 import VueMultiselect from 'vue-multiselect'
+import {toast} from "vue3-toastify";
 const props = defineProps({
     appointment: {
         type: Object,
@@ -27,6 +28,16 @@ const form = useForm(props?.appointment?.data?.id ? "put" : "post", props?.appoi
 });
 const nameWithLabel = ({id, name}) => {
     return `${name}`
+}
+const formConfig = {
+    replace: true,
+    preserveScroll: true,
+    onSuccess: (page) => {
+        form.reset();
+        toast(props?.appointment?.data?.id ? "Appointment updated successfully." : "Appointment added successfully.", {
+            type: 'success',
+        })
+    }
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
@@ -55,7 +66,7 @@ const nameWithLabel = ({id, name}) => {
                     class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
                 >
                     <section>
-                        <form class="mt-2" @submit.prevent="form.submit()">
+                        <form class="mt-2" @submit.prevent="form.submit(formConfig)">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mb-4">
                                 <div class="mb-2">
                                     <InputLabel :is-require="true" for="name" value="Patient Name"/>

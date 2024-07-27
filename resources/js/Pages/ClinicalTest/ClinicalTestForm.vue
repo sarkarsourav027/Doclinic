@@ -8,6 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {BxArrowBack} from "@/utils/icons.js"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Spinner from "@/Components/Spinner.vue";
+import {toast} from "vue3-toastify";
 
 const props = defineProps({
     clinicalTest: {
@@ -19,6 +20,16 @@ const form = useForm(props?.clinicalTest?.data?.id ? "put" : "post", props?.clin
     name: props?.clinicalTest?.data?.name ?? '',
     amount: props?.clinicalTest?.data?.amount ?? '',
 });
+const formConfig = {
+    replace: true,
+    preserveScroll: true,
+    onSuccess: (page) => {
+        form.reset();
+        toast(props?.clinicalTest?.data?.id ? "Clinical Test updated successfully." : "Clinical Test added successfully.", {
+            type: 'success',
+        })
+    }
+}
 </script>
 
 <template>
@@ -45,7 +56,7 @@ const form = useForm(props?.clinicalTest?.data?.id ? "put" : "post", props?.clin
                     class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
                 >
                     <section>
-                        <form class="mt-2" @submit.prevent="form.submit()">
+                        <form class="mt-2" @submit.prevent="form.submit(formConfig)">
                             <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-5 mb-3">
                                 <div class="mb-2">
                                     <InputLabel :is-require="true" for="name" value="Name"/>

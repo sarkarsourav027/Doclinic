@@ -15,9 +15,9 @@ class AppointmentSeeder extends Seeder
     {
         Appointment::factory(50)->create()->each(function ($appointment) {
             // Attach a random number of clinical tests to each appointment
-            $appointment->clinicalTests()->attach(
-                ClinicalTest::inRandomOrder()->first()->id
-            );
+            $appointment->clinicalTests()->attach(ClinicalTest::inRandomOrder()->first()->id, [
+                'clinical_test_amount' => rand(500, 7000)
+            ]);
         });
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -20,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'parent_id',
+        'designation',
+        'phone_number',
     ];
 
     /**
@@ -48,7 +52,9 @@ class User extends Authenticatable
     public function scopeFilter($query, array $filters): void
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->where('name', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
+                ->orWhere('phone_number', 'like', '%' . $search . '%');
         })->when($filters['trashed'] ?? null, function ($query, $trashed) {
             if ($trashed === 'with') {
                 $query->withTrashed();
@@ -56,5 +62,10 @@ class User extends Authenticatable
                 $query->onlyTrashed();
             }
         });
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
     }
 }
