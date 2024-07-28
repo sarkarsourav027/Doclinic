@@ -11,7 +11,6 @@ import TableRow from "@/Components/Table/TableRow.vue";
 import TableCell from "@/Components/Table/TableCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 import TextInput from "@/Components/TextInput.vue";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
 import Badge from "@/Components/Badge/Badge.vue";
 import moment from "moment"
 import {toast} from "vue3-toastify";
@@ -136,7 +135,7 @@ const copyText = (link) => {
                                 <TableCell>
                                     <span v-if="item?.clinical_test?.length">
                                         <span v-for="test in item.clinical_test" :key="test.id">
-                                            <Badge class="bg-fuchsia-700 whitespace-nowrap">
+                                            <Badge class="background-primary-t whitespace-nowrap">
                                                 {{ test.name }}
                                             </Badge>
                                         </span>
@@ -144,10 +143,10 @@ const copyText = (link) => {
                                     <span v-else>NA</span>
                                 </TableCell>
                                 <TableCell class="flex justify-center items-center gap-2 px-4 py-1">
-                                    <LinkWarningButton
+                                    <LinkPrimaryButton
                                         :route-name="route('appointment.edit',{ appointment: item.id })">
                                         <ClNoteEdit/>&nbsp;Edit
-                                    </LinkWarningButton>
+                                    </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>
                         </template>

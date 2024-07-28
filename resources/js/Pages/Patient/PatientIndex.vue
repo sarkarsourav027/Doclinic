@@ -10,9 +10,9 @@ import TableRow from "@/Components/Table/TableRow.vue";
 import TableCell from "@/Components/Table/TableCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 import TextInput from "@/Components/TextInput.vue";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
 import moment from "moment"
 import {toast} from "vue3-toastify";
+import LinkPrimaryButton from "@/Components/Buttons/LinkPrimaryButton.vue";
 
 const props = defineProps({
     filters: {
@@ -102,10 +102,10 @@ const copyText = (link) => {
                                     {{ moment(item?.created_at).format('DD MMM YYYY hh:mm A') }}
                                 </TableCell>
                                 <TableCell class="flex justify-end items-center gap-2 px-4 py-1">
-                                    <LinkWarningButton
+                                    <LinkPrimaryButton
                                         :route-name="route('patient.show',{ patient: item.id })">
                                         <CaView/>&nbsp;View
-                                    </LinkWarningButton>
+                                    </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>
                         </template>

@@ -3,7 +3,7 @@
 import {ref, watch} from "vue";
 import {router} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {ClNoteEdit,AkPlus} from "@/utils/icons.js"
+import {ClNoteEdit, AkPlus} from "@/utils/icons.js"
 import LinkPrimaryButton from "@/Components/Buttons/LinkPrimaryButton.vue";
 import TableHead from "@/Components/Table/TableHead.vue";
 import TableHeadCell from "@/Components/Table/TableHeadCell.vue";
@@ -12,7 +12,6 @@ import TableRow from "@/Components/Table/TableRow.vue";
 import TableCell from "@/Components/Table/TableCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 import TextInput from "@/Components/TextInput.vue";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
 
 const props = defineProps({
     filters: {
@@ -71,10 +70,10 @@ watch(search, (value) => {
                                 <TableCell> {{ item.name }}</TableCell>
                                 <TableCell> {{ item.amount }}</TableCell>
                                 <TableCell class="flex justify-center items-center gap-2 px-4 py-1">
-                                    <LinkWarningButton
+                                    <LinkPrimaryButton
                                         :route-name="route('clinical-test.edit',{ clinical_test: item.id })">
                                         <ClNoteEdit/>&nbsp;Edit
-                                    </LinkWarningButton>
+                                    </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>
                         </template>

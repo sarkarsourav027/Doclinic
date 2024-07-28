@@ -12,7 +12,6 @@ import TableRow from "@/Components/Table/TableRow.vue";
 import TableCell from "@/Components/Table/TableCell.vue";
 import Pagination from "@/Components/Pagination.vue";
 import TextInput from "@/Components/TextInput.vue";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
 import Badge from "@/Components/Badge/Badge.vue";
 import moment from "moment"
 const props = defineProps({
@@ -86,7 +85,7 @@ watch(search, (value) => {
                                 </TableCell>
                                 <TableCell>
                                     <span v-for="(available_day) in item?.available_days" :key="available_day">
-                                        <Badge class="bg-fuchsia-700">
+                                        <Badge class="background-primary-t">
                                             {{ available_day }}
                                         </Badge>
                                     </span>
@@ -96,10 +95,10 @@ watch(search, (value) => {
                                     {{ moment(item?.created_at).format('DD MMM YYYY hh:mm A') }}
                                 </TableCell>
                                 <TableCell class="flex justify-center items-center gap-2 px-4 py-1">
-                                    <LinkWarningButton
+                                    <LinkPrimaryButton
                                         :route-name="route('doctor.edit',{ doctor: item.id })">
                                         <ClNoteEdit/>&nbsp;Edit
-                                    </LinkWarningButton>
+                                    </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>
                         </template>

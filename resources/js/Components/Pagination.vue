@@ -31,11 +31,11 @@ const nextPageUrl = paginationLinks.value.find(link => link.label === 'Next')?.u
             </Link>
             <template v-for="(link,index) in paginationLinks" :key="index" class="">
                 <div v-if="!link.url"
-                     :class="['px-4 py-2 text-sm font-medium border', link.active ? 'bg-blue-700 text-white border-blue-700 dark:bg-blue-500 dark:text-white dark:border-blue-500' : 'text-gray-900 bg-white border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white']"
+                     :class="['px-4 py-2 text-sm font-medium border', link.active ? 'background-primary-t text-white border-blue-700 dark:bg-blue-500 dark:text-white dark:border-blue-500' : 'text-gray-900 bg-white border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white']"
                      v-html="link.label"/>
                 <Link v-else
 
-                             :class="['px-4 py-2 text-sm font-medium border', link.active ? 'bg-blue-700 text-white border-blue-700 dark:bg-blue-500 dark:text-white dark:border-blue-500' : 'text-gray-900 bg-white border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white']"
+                             :class="['px-4 py-2 text-sm font-medium border', link.active ? 'background-primary-t text-white border-blue-700 dark:bg-blue-500 dark:text-white dark:border-blue-500' : 'text-gray-900 bg-white border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white']"
                              :href="link.url"
                              v-html="link.label"/>
             </template>

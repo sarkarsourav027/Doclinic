@@ -3,7 +3,6 @@ import {AkCopy, BxArrowBack, BxSolidDownload} from "@/utils/icons";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import LinkPrimaryButton from "@/Components/Buttons/LinkPrimaryButton.vue";
 import moment from "moment/moment.js";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
 import TableRow from "@/Components/Table/TableRow.vue";
 import TableHeadCell from "@/Components/Table/TableHeadCell.vue";
 import TableBody from "@/Components/Table/TableBody.vue";
@@ -142,10 +141,10 @@ console.log('props',props.appointments)
                                                         <span v-else>NA</span>
                                                     </TableCell>
                                                     <TableCell class="flex justify-center items-center gap-2 px-4 py-1">
-                                                        <LinkWarningButton
+                                                        <LinkPrimaryButton
                                                             :route-name="route('appointment.edit',{ appointment: item.id })">
                                                             <ClNoteEdit/>&nbsp;Edit
-                                                        </LinkWarningButton>
+                                                        </LinkPrimaryButton>
                                                     </TableCell>
                                                 </TableRow>
                                             </template>

@@ -16,7 +16,7 @@ import Pagination from "@/Components/Pagination.vue";
 import {ref, watch} from "vue";
 import {router, Link} from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
-import LinkWarningButton from "@/Components/Buttons/LinkWarningButton.vue";
+import LinkPrimaryButton from "@/Components/Buttons/LinkPrimaryButton.vue";
 
 const props = defineProps({
     filters: {
@@ -132,10 +132,10 @@ watch(search, (value) => {
                                     <TableCell> {{ item.doctor?.name }}</TableCell>
                                     <TableCell
                                         class="flex justify-center items-center gap-2 px-4 py-1">
-                                        <LinkWarningButton
+                                        <LinkPrimaryButton
                                             :route-name="route('appointment.edit',{ appointment: item.id })">
                                             <ClNoteEdit/>&nbsp;Edit
-                                        </LinkWarningButton>
+                                        </LinkPrimaryButton>
                                     </TableCell>
                                 </TableRow>
                             </template>

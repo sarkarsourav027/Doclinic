@@ -71,6 +71,7 @@ class BillingController extends Controller
             $gst_amount = $request->input('gst_amount');
             $mpdf = new Mpdf();
 
+            $mpdf->imageVars['logo'] = file_get_contents(public_path('assets/logo-letter.png'));
             $mpdf->WriteHTML(view('invoice.invoice', [
                 'invoice_number' => $invoice_number,
                 'billing_date' => $billing_date,
@@ -91,7 +92,7 @@ class BillingController extends Controller
             $mpdf->SetHTMLFooter(view('invoice.invoice-footer')->render());
 
             $invoice_file = $invoice_number . '.pdf';
-            $mpdf->Output(storage_path('app/public/invoice/' . $invoice_file), \Mpdf\Output\Destination::FILE);
+            $mpdf->Output(storage_path('app/public/invoice/' . $invoice_file));
 
             Billing::create([
                 'invoice_file' => $invoice_file,

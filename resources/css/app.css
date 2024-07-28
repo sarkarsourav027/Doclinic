@@ -20,24 +20,27 @@ TheraConnect Updated Root Style
     background-color: var(--secondary-background-color);
     color: var(--secondary-text-color);
 }
-.sidebar-t .selectio-link{
+.selection-link{
     background-color: var(--primary-background-color);
 }
-
+.hover\:selection-link:hover {
+    background-color: var(--primary-background-color);
+}
 /* Updated Text Style */
 .text-primary-t{
     color: var(--primary-text-color);
 }
-.text-secodary-t{
+.text-secondary-t{
     color: var(--secondary-text-color);
 }
 
 /* Updated Background Style */
-.backgroud-primary-t{
-    color: var(--primary-background-color);
+.background-primary-t{
+    background-color: var(--primary-background-color);
+    color: var(--secondary-text-color);
 }
-.backgroud-secodary-t{
-    color: var(--secondary-background-color);
+.background-secondary-t{
+    background-color: var(--secondary-background-color);
 }
 
 /* Updated Button Style */

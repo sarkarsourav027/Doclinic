@@ -87,8 +87,7 @@
                 <table>
                     <tr>
                         <td class='title'>
-                            <img src="{{asset('/assets/logo-letter.png')}}"
-                                 style='width: 100%; max-width: 100px;'>
+                            <img src="var:logo" style='width: 100%; max-width: 100px;'>
                             <p style='font-size:20px;'>TheraConnect</p>
                         </td>
                         <td>

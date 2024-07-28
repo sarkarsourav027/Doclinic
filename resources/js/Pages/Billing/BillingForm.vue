@@ -23,29 +23,19 @@ import TableCell from "@/Components/Table/TableCell.vue";
 import DangerButton from "@/Components/Buttons/DangerButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 
-const isGstBill = ref(false)
+const isGstBill = ref(false);
 const props = defineProps({
-    appointments: {
-        type: Object,
-        require: true,
-    },
-    select_clinical_tests: {
-        type: Object,
-        require: true,
-    },
-    clinical_tests: {
-        type: Object,
-        require: true,
-    },
-    appointment: {
-        type: Object,
-        require: true,
-    },
-})
-const totalBillingAmount = ref(0)
-const clinicalTestTotalAmount = ref(0)
-const givenGstPercentage = ref(0)
-const gstAmountAfterSelectGst = ref(0)
+    appointments: {type: Object, require: true},
+    select_clinical_tests: {type: Object, require: true},
+    clinical_tests: {type: Object, require: true},
+    appointment: {type: Object, require: true},
+});
+
+const totalBillingAmount = ref(0);
+const clinicalTestTotalAmount = ref(0);
+const givenGstPercentage = ref(0);
+const gstAmountAfterSelectGst = ref(0);
+
 const form = useForm("post", route("billing.store"), {
     appointment_id: '',
     name: props?.appointment?.data?.patient?.name ?? '',
@@ -61,70 +51,61 @@ const form = useForm("post", route("billing.store"), {
     clinical_test_amount: clinicalTestTotalAmount.value ?? 0,
     gst_amount: gstAmountAfterSelectGst.value ?? 0,
     billing_amount: totalBillingAmount.value ?? 0,
-    clinical_test_information: [{
-        test_id: null,
-        amount: null,
-    }],
+    clinical_test_information: [{test_id: null, amount: null}],
 });
-const nameWithLabel = ({id, name}) => {
-    return `${name}`
-}
+
 const formConfig = {
     replace: true,
     preserveScroll: true,
     onBefore: () => {
-        form.clinical_test_amount = clinicalTestTotalAmount.value
-        form.billing_amount = totalBillingAmount.value
-        form.gst_amount = gstAmountAfterSelectGst.value
+        form.clinical_test_amount = clinicalTestTotalAmount.value;
+        form.billing_amount = totalBillingAmount.value;
+        form.gst_amount = gstAmountAfterSelectGst.value;
     },
     onSuccess: (page) => {
         form.reset();
-        toast(props?.appointment?.data?.id ? "Billing updated successfully." : "Billing added successfully.", {
-            type: 'success',
-        })
+        toast(props?.appointment?.data?.id ? "Billing updated successfully." : "Billing added successfully.", {type: 'success'});
     }
-}
-
-const handleAppointmentRemove = (event) => {
-
-}
+};
 const handleAppointmentSelect = (event) => {
+
     router.reload({
         only: ['appointment'], data: {appointment_id: event.id, partial: true}, onSuccess: (page) => {
             const appointment = page.props?.appointment?.data
-
             form.name = appointment.patient?.name
             form.phone_number = appointment?.patient?.phone_number
-
             form.doctor_name = appointment?.doctor?.name ?? ''
             form.doctor_fees = appointment?.doctor?.fees ?? ''
-
             totalBillingAmount.value = parseFloat(clinicalTestTotalAmount.value) + parseFloat(form.doctor_fees)
         }
     })
 };
-const handleGstBillCheck = (e) => {
-    isGstBill.value = e
-}
-const findSelectedTestById = (id, array) => {
-    return array.find(item => item.id === parseInt(id)) || null;
-};
 const updateBillingAmounts = () => {
-
-    const clinicalTestTotal = form.clinical_test_information.reduce((sum, item) => {
+    clinicalTestTotalAmount.value = form.clinical_test_information.reduce((sum, item) => {
         const amount = parseFloat(item.amount);
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
-    clinicalTestTotalAmount.value = clinicalTestTotal;
-    totalBillingAmount.value = clinicalTestTotal
+    gstAmountAfterSelectGst.value = (clinicalTestTotalAmount.value * givenGstPercentage.value) / 100;
+    totalBillingAmount.value = clinicalTestTotalAmount.value + gstAmountAfterSelectGst.value + parseFloat(form.doctor_fees || 0);
 
-    gstAmountAfterSelectGst.value = ((totalBillingAmount.value * givenGstPercentage.value) / 100)
-
-    const doctorFees = parseFloat(form.doctor_fees);
-    totalBillingAmount.value = clinicalTestTotal + gstAmountAfterSelectGst.value + (isNaN(doctorFees) ? 0 : doctorFees);
+    form.clinical_test_amount = clinicalTestTotalAmount.value;
+    form.billing_amount = totalBillingAmount.value;
+    form.gst_amount = gstAmountAfterSelectGst.value;
 };
 
+const handleGstBillCheck = (e) => {
+    isGstBill.value = e;
+    if (!e) {
+        gstAmountAfterSelectGst.value = 0;
+        givenGstPercentage.value = 0;
+        form.gst_percentage = 0;
+        form.gst_amount = 0;
+        updateBillingAmounts();
+    }
+};
+
+const findSelectedTestById = (id, array) => array.find(item => item.id === parseInt(id)) || null;
 
 const handleSelectClinicalTest = (event, index) => {
     const selectedTest = findSelectedTestById(event, props.clinical_tests.data);
@@ -141,10 +122,12 @@ const removeRow = (index) => {
     form.clinical_test_information.splice(index, 1);
     updateBillingAmounts();
 };
+
 const handleChangeGstPercentage = (event) => {
     givenGstPercentage.value = event.target.value;
     updateBillingAmounts();
-}
+};
+
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 

@@ -44,8 +44,8 @@ const toggleDropdown = (label) => {
     <Head :title="title"/>
     <div>
         <aside :class="[ isSidebarOpen ? 'translate-x-[-250px]' : 'w-[250px]']"
-               class="h-screen overflow-y-scroll bg-white fixed z-[999] left-0 top-0 shadow transition-all scrollbar-none">
-            <div class="sticky bg-white top-0 left-0 py-5 flex items-center justify-center px-5">
+               class="h-screen overflow-y-scroll sidebar-t fixed z-[999] left-0 top-0 shadow transition-all scrollbar-none">
+            <div class="sticky sidebar-t top-0 left-0 py-5 flex items-center justify-center px-5">
                 <h2 class="text-center text-xl font-bold">
                     <Link :href="route('dashboard.index')">
                         <ApplicationLogo/>
@@ -71,9 +71,9 @@ const toggleDropdown = (label) => {
                             <ul v-if="link.isOpen" class="pl-4">
                                 <li v-for="child in link.children" :key="child.label" class="mb-0.5">
                                     <Link
-                                        :class="{ 'text-white bg-blue-700': route().current(child.route)}"
+                                        :class="{ 'text-white selection-link': route().current(child.route)}"
                                         :href="route(child.route)"
-                                        class="px-4 py-3 hover:text-white hover:bg-blue-700 rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer">
+                                        class="px-4 py-3 hover:text-white hover:selection-link rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer">
                                         <component :is="child.icon" class="text-lg"/>
                                         {{ child.label }}
                                     </Link>
@@ -81,9 +81,9 @@ const toggleDropdown = (label) => {
                             </ul>
                         </div>
                         <Link v-else
-                              :class="{ 'text-white bg-blue-700': route().current(link.route)}"
+                              :class="{ 'text-white selection-link': route().current(link.route)}"
                               :href="route(link.route)"
-                              class="px-4 py-3 hover:text-white hover:bg-blue-700 rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer"
+                              class="px-4 py-3 hover:text-white hover:selection-link rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer"
                               @click="toggleDropdown(link.label)">
                             <component :is="link.icon" class="text-lg"/>
                             {{ link.label }}

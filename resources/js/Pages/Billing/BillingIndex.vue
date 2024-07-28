@@ -14,6 +14,7 @@ import Pagination from "@/Components/Pagination.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Badge from "@/Components/Badge/Badge.vue";
 import {toast} from "vue3-toastify";
+import CurrencySymbol from "@/Components/CurrencySymbol.vue";
 
 const props = defineProps({
     filters: {
@@ -88,10 +89,8 @@ const copyText = (link) => {
                         <TableHeadCell> Invoice Number</TableHeadCell>
                         <TableHeadCell> Patient</TableHeadCell>
                         <TableHeadCell> Doctor</TableHeadCell>
-                        <TableHeadCell>Doctor Fees</TableHeadCell>
                         <TableHeadCell>Clinical Test</TableHeadCell>
                         <TableHeadCell>Test Fees</TableHeadCell>
-                        <TableHeadCell>File</TableHeadCell>
                         <TableHeadCell> Billing Amount</TableHeadCell>
                     </TableHead>
                     <TableBody>
@@ -99,11 +98,23 @@ const copyText = (link) => {
                             <TableRow v-for="(item,key) in billings.data" :key="item.id">
                                 <TableCell> {{ key + 1 }}</TableCell>
                                 <TableCell class="whitespace-nowrap">
-                                    <div class="flex items-center cursor-pointer"
-                                         title="click to copy appointment id" @click="copyText(item?.invoice_number)">
-                                        <span>{{ item.invoice_number }}</span>
-                                        <AkCopy class="ml-2"/>
+                                    <div class="flex items-center">
+                                        <div class="cursor-pointer flex items-center"
+                                             title="click to copy appointment id"
+                                             @click="copyText(item?.invoice_number)">
+                                            <span>{{ item.invoice_number }}</span>
+                                            <AkCopy class="ml-2"/>
+                                        </div>
+                                        <a
+                                            v-if="item?.invoice_file"
+                                            :href="item?.invoice_file"
+                                            class="flex items-center text-blue-600 hover:text-blue-800 transition-all duration-200 ease-in-out justify-center"
+                                            target="_blank"
+                                        >
+                                            <BxSolidDownload class="ml-2"/>
+                                        </a>
                                     </div>
+
                                 </TableCell>
                                 <TableCell>
                                     <div class="flex gap-1">
@@ -128,36 +139,23 @@ const copyText = (link) => {
                                         <span class="text-left whitespace-nowrap">
                                             <p class="text-black">{{ item?.appointment?.doctor?.name }}</p>
                                             <p class="text-black">{{ item?.appointment?.doctor?.phone_number }}</p>
-                                            <p class="text-amber-400 uppercase">{{
-                                                    item?.appointment?.doctor?.doctor_type
-                                                }}</p>
+                                            <p class="text-amber-400 uppercase">{{ item?.appointment?.doctor?.doctor_type }}</p>
+                                            <p class="uppercase"><CurrencySymbol/>{{ item.doctor_fees }}</p>
                                       </span>
                                     </div>
                                 </TableCell>
-                                <TableCell class="whitespace-nowrap">{{ item.doctor_fees }}</TableCell>
-                                <TableCell>
+                                <TableCell class="whitespace-nowrap">
                                     <span v-if="item?.appointment?.clinical_test?.length">
                                         <span v-for="test in item?.appointment?.clinical_test" :key="test.id">
-                                            <Badge class="bg-fuchsia-700 whitespace-nowrap">
+                                            <Badge class="background-primary-t">
                                                 {{ test.name }}
                                             </Badge>
                                         </span>
                                     </span>
                                     <span v-else>NA</span>
                                 </TableCell>
-                                <TableCell class="whitespace-nowrap">{{ item.clinical_test_amount }}</TableCell>
-                                <TableCell class="whitespace-nowrap">{{ item.billing_amount }}</TableCell>
-                                <TableCell class="whitespace-nowrap">
-                                    <a
-                                        v-if="item?.invoice_file"
-                                        :href="item?.invoice_file"
-                                        class="flex items-center text-blue-600 hover:text-blue-800 transition-all duration-200 ease-in-out justify-center"
-                                        target="_blank"
-                                    >
-                                        <BxSolidDownload/>&nbsp;
-                                        Download
-                                    </a>
-                                </TableCell>
+                                <TableCell class="whitespace-nowrap"><CurrencySymbol/>{{ item.clinical_test_amount }}</TableCell>
+                                <TableCell class="whitespace-nowrap"><CurrencySymbol/>{{ item.billing_amount }}</TableCell>
                             </TableRow>
                         </template>
                         <template v-else>
