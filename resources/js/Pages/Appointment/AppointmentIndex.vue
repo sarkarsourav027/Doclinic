@@ -2,7 +2,7 @@
 import {ref, watch} from "vue";
 import {router} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {ClNoteEdit, AkPlus, AkCopy} from "@/utils/icons.js"
+import {ClNoteEdit,UnInvoice, AkPlus, AkCopy} from "@/utils/icons.js"
 import LinkPrimaryButton from "@/Components/Buttons/LinkPrimaryButton.vue";
 import TableHead from "@/Components/Table/TableHead.vue";
 import TableHeadCell from "@/Components/Table/TableHeadCell.vue";
@@ -132,10 +132,10 @@ const copyText = (link) => {
                                 <TableCell class="whitespace-nowrap">
                                     {{ moment(item?.appointment_date).format('DD MMM YYYY') }}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell class="whitespace-nowrap">
                                     <span v-if="item?.clinical_test?.length">
                                         <span v-for="test in item.clinical_test" :key="test.id">
-                                            <Badge class="background-primary-t whitespace-nowrap">
+                                            <Badge class="background-primary-t">
                                                 {{ test.name }}
                                             </Badge>
                                         </span>
@@ -146,6 +146,10 @@ const copyText = (link) => {
                                     <LinkPrimaryButton
                                         :route-name="route('appointment.edit',{ appointment: item.id })">
                                         <ClNoteEdit/>&nbsp;Edit
+                                    </LinkPrimaryButton>
+                                    <LinkPrimaryButton
+                                        :route-name="route('billing.create',{ appointment_id: item.id })">
+                                        <UnInvoice/>&nbsp;Bill
                                     </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>

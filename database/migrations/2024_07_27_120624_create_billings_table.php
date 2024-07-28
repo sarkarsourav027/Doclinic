@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number');
-            $table->foreignId('appointment_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('appointment_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('billing_date');
             $table->decimal('doctor_fees',18,2);
             $table->decimal('clinical_test_amount',18,2);

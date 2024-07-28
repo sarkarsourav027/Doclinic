@@ -23,7 +23,7 @@ class StoreBillingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_id' => 'required',
+            'appointment' => 'required',
             'name' => 'required|string',
             'email' => ['sometimes', 'nullable', 'string', 'lowercase', 'email', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255'],
             'phone_number' => 'required|string|max_digits:10|min_digits:10',
@@ -36,8 +36,9 @@ class StoreBillingRequest extends FormRequest
                     $fail($attribute . ' must be greater than 0 if GST is applied.');
                 }
             }],
-            'doctor_name' => 'required|string',
-            'doctor_fees' => 'required|numeric',
+            'is_add_doctor_fees' => 'required|boolean',
+            'doctor_name' => ['sometimes','nullable', 'string', 'required_if:is_add_doctor_fees,true'],
+            'doctor_fees' => ['sometimes','nullable', 'numeric', 'required_if:is_add_doctor_fees,true'],
             'clinical_test_information.*.test_id' => ['nullable', 'sometimes', 'required_with:schedule_of_work_information.*.test_id', 'integer'],
             'clinical_test_information.*.amount' => ['nullable', 'sometimes', 'required_with:schedule_of_work_information.*.amount', 'numeric'],
         ];

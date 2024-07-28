@@ -49,7 +49,7 @@ class BillingController extends Controller
             'appointments' => $appointments,
             'select_clinical_tests' => $select_clinical_tests,
             'clinical_tests' => ClinicalTestResource::collection($clinical_tests),
-            'appointment' => Inertia::lazy(fn() => AppointmentResource::make(Appointment::query()->with(['doctor', 'patient'])->where('id', $request->appointment_id)->first())),
+            'appointment' => fn() => AppointmentResource::make(Appointment::query()->with(['doctor', 'patient'])->where('id', $request->appointment_id)->first()),
         ]);
     }
 
@@ -61,7 +61,9 @@ class BillingController extends Controller
         DB::transaction(function () use ($request) {
 
             $invoice_number = 'INV' . substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time();
+            $appointmentId = $request->input('appointment')['id'];
             $billing_date = $request->input('billing_date');
+            $is_add_doctor_fees = $request->input('is_add_doctor_fees');
             $doctor_fees = $request->input('doctor_fees');
             $doctor_name = $request->input('doctor_name');
             $billing_amount = $request->input('billing_amount');
@@ -80,6 +82,7 @@ class BillingController extends Controller
                 'patient_email' => $request->input('email'),
                 'patient_address' => $request->input('address'),
                 'payment_mode' => $request->input('payment_mode'),
+                'is_add_doctor_fees' => $is_add_doctor_fees,
                 'doctor_name' => $doctor_name,
                 'is_gst_bill' => $is_gst_bill,
                 'gst_percentage' => $gst_percentage,
@@ -87,7 +90,7 @@ class BillingController extends Controller
                 'doctor_fees' => $doctor_fees,
                 'billing_amount' => $billing_amount,
                 'gst_amount' => $gst_amount,
-                'billing_amount_in_word' => Number::spell($billing_amount)
+                'billing_amount_in_word' => ucfirst(Number::spell($billing_amount))
             ])->render());
             $mpdf->SetHTMLFooter(view('invoice.invoice-footer')->render());
 
@@ -97,7 +100,7 @@ class BillingController extends Controller
             Billing::create([
                 'invoice_file' => $invoice_file,
                 'invoice_number' => $invoice_number,
-                'appointment_id' => $request->input('appointment_id')['id'],
+                'appointment_id' => $appointmentId,
                 'billing_date' => $request->input('billing_date'),
                 'doctor_fees' => $request->input('doctor_fees'),
                 'clinical_test_amount' => $request->input('clinical_test_amount'),
@@ -109,7 +112,6 @@ class BillingController extends Controller
 
             if ($request->filled('clinical_test_information')) {
                 $clinicalTests = collect($request->input('clinical_test_information'));
-                $appointmentId = $request->input('appointment_id')['id'];
 
                 Appointment::find($appointmentId)
                     ->clinicalTests()

@@ -8,9 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {BxArrowBack} from "@/utils/icons.js"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Spinner from "@/Components/Spinner.vue";
-import VueMultiselect from 'vue-multiselect'
 import {toast} from "vue3-toastify";
-import {router} from "@inertiajs/vue3";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import Checkbox from "@/Components/Checkbox.vue";
@@ -24,6 +22,7 @@ import DangerButton from "@/Components/Buttons/DangerButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 
 const isGstBill = ref(false);
+const isAddDoctorFees = ref(false);
 const props = defineProps({
     appointments: {type: Object, require: true},
     select_clinical_tests: {type: Object, require: true},
@@ -37,7 +36,10 @@ const givenGstPercentage = ref(0);
 const gstAmountAfterSelectGst = ref(0);
 
 const form = useForm("post", route("billing.store"), {
-    appointment_id: '',
+    appointment: {
+        id:props?.appointment?.data?.id,
+        appointment_id: props?.appointment?.data?.appointment_id
+    } ?? {},
     name: props?.appointment?.data?.patient?.name ?? '',
     phone_number: props?.appointment?.data?.patient?.phone_number ?? '',
     email: '',
@@ -45,9 +47,10 @@ const form = useForm("post", route("billing.store"), {
     billing_date: '',
     payment_mode: '',
     is_gst_bill: false,
+    is_add_doctor_fees: false,
     gst_percentage: 0,
-    doctor_name: props?.appointment?.data?.doctor?.name ?? '',
-    doctor_fees: props?.appointment?.data?.doctor?.fees ?? '',
+    doctor_name: '',
+    doctor_fees: 0,
     clinical_test_amount: clinicalTestTotalAmount.value ?? 0,
     gst_amount: gstAmountAfterSelectGst.value ?? 0,
     billing_amount: totalBillingAmount.value ?? 0,
@@ -67,7 +70,7 @@ const formConfig = {
         toast(props?.appointment?.data?.id ? "Billing updated successfully." : "Billing added successfully.", {type: 'success'});
     }
 };
-const handleAppointmentSelect = (event) => {
+/*const handleAppointmentSelect = (event) => {
 
     router.reload({
         only: ['appointment'], data: {appointment_id: event.id, partial: true}, onSuccess: (page) => {
@@ -79,7 +82,7 @@ const handleAppointmentSelect = (event) => {
             totalBillingAmount.value = parseFloat(clinicalTestTotalAmount.value) + parseFloat(form.doctor_fees)
         }
     })
-};
+};*/
 const updateBillingAmounts = () => {
     clinicalTestTotalAmount.value = form.clinical_test_information.reduce((sum, item) => {
         const amount = parseFloat(item.amount);
@@ -101,6 +104,19 @@ const handleGstBillCheck = (e) => {
         givenGstPercentage.value = 0;
         form.gst_percentage = 0;
         form.gst_amount = 0;
+        updateBillingAmounts();
+    }
+};
+
+const handleDoctorFeesCheck = (e) => {
+    isAddDoctorFees.value = e;
+    if (!e) {
+        form.doctor_name = ''
+        form.doctor_fees = 0
+        updateBillingAmounts();
+    } else {
+        form.doctor_name = props?.appointment?.data?.doctor?.name
+        form.doctor_fees = props?.appointment?.data?.doctor?.fees
         updateBillingAmounts();
     }
 };
@@ -129,8 +145,6 @@ const handleChangeGstPercentage = (event) => {
 };
 
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
-
 <template>
     <AuthenticatedLayout title="Add Billing">
         <template #header>
@@ -157,21 +171,10 @@ const handleChangeGstPercentage = (event) => {
                         <form class="mt-2" @submit.prevent="form.submit(formConfig)">
                             <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5 mb-4">
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" class="mb-2" for="appointment_id"
-                                                value="Billing"/>
-                                    <VueMultiselect
-                                        v-model="form.appointment_id"
-                                        :custom-label="nameWithLabel"
-                                        :multiple="false"
-                                        :options="appointments"
-                                        label="name"
-                                        placeholder="Select Days"
-                                        track-by="name"
-                                        @remove="(e) => handleAppointmentRemove(e)"
-                                        @select="(e) => handleAppointmentSelect(e)"
-                                    >
-                                    </VueMultiselect>
-                                    <InputError :message="form.errors.appointment_id" class="mt-2"/>
+                                    <InputLabel :is-require="true" class="mb-2" for="appointment"
+                                                value="Appointment Id"/>
+                                    <span class="text-2xl">{{ form.appointment.appointment_id }}</span>
+                                    <InputError :message="form.errors.appointment" class="mt-2"/>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
@@ -287,8 +290,15 @@ const handleChangeGstPercentage = (event) => {
                                     <InputError :message="form.errors.gst_percentage" class="mt-2"/>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
                                 <div class="mb-2">
+                                    <InputLabel :is-require="false" for="is_add_doctor_fees" value="Doctor"/>
+                                    <Checkbox v-model:checked="form.is_add_doctor_fees" class="cursor-pointer"
+                                              name="is_add_doctor_fees"
+                                              @update:checked="handleDoctorFeesCheck"/>
+                                    <InputError :message="form.errors.is_add_doctor_fees" class="mt-2"/>
+                                </div>
+                                <div v-if="isAddDoctorFees" class="mb-2">
                                     <InputLabel :is-require="true" for="doctor_name" value="Doctor Name"/>
 
                                     <TextInput
@@ -302,7 +312,7 @@ const handleChangeGstPercentage = (event) => {
 
                                     <InputError :message="form.errors.doctor_name" class="mt-2"/>
                                 </div>
-                                <div class="mb-2">
+                                <div v-if="isAddDoctorFees" class="mb-2">
                                     <InputLabel :is-require="true" for="doctor_fees" value="Doctor Fees"/>
 
                                     <TextInput

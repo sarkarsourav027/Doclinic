@@ -135,14 +135,15 @@
         </tr>
         <tr class='total'>
             <td>GST ({{$gst_percentage}}%):</td>
-            <td>₹{{number_format($gst_amount, 2)}}</td>
+            <td>₹{{ $is_gst_bill ? number_format($gst_amount, 2) : number_format(0, 2)}}</td>
         </tr>
         <tr class='total'>
             <td>Total with GST:</td>
             <td>₹{{ number_format($clinical_test_amount + $gst_amount, 2) }}</td>
         </tr>
         <tr class='item'>
-            <td>Doctor Fees ({{$doctor_name}})</td>
+            <td>Doctor Fees: <span style="display: {{$is_add_doctor_fees ? 'block' : 'none'}}">({{$doctor_name}})</span>
+            </td>
             <td>₹{{$doctor_fees}}</td>
         </tr>
         <tr class='total'>
