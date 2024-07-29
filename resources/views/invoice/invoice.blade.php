@@ -150,7 +150,7 @@
         <tr class='item'>
             <td>Doctor Fees: <span style="display: {{$is_add_doctor_fees ? 'block' : 'none'}}">({{$doctor_name}})</span>
             </td>
-            <td>₹{{$doctor_fees}}</td>
+            <td>₹{{number_format($doctor_fees, 2)}}</td>
         </tr>
         <tr class='total'>
             <td style='font-size: 15px; color: #3a86ff;'><strong>Net Amount:</strong></td>

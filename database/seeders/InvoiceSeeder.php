@@ -13,11 +13,12 @@ class InvoiceSeeder extends Seeder
      */
     public function run(): void
     {
-        Invoice::factory(50)->create()->each(function ($invoice) {
+        Invoice::factory(50)->create();
+        /*Invoice::factory(50)->create()->each(function ($invoice) {
             // Attach a random number of clinical tests to each appointment
             $invoice->clinicalTests()->attach(ClinicalTest::inRandomOrder()->first()->id, [
                 'clinical_test_amount' => rand(500, 7000)
             ]);
-        });
+        });*/
     }
 }
