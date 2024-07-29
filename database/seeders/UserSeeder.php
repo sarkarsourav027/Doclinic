@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AccountDesignation;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,6 +19,7 @@ class UserSeeder extends Seeder
     {
         User::factory()->create([
             'name' => 'Xeuix',
+            'designation' => AccountDesignation::ADMIN,
             'email' => 'admin@xeuix.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),

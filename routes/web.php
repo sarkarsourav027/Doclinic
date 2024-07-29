@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ClinicalTestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
@@ -35,7 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('patient', PatientController::class);
     Route::resource('appointment', AppointmentController::class);
     Route::resource('account', AccountController::class);
-    Route::resource('billing', BillingController::class);
+    Route::resource('invoice', BillingController::class);
+    Route::resource('regular-invoice', InvoiceController::class);
 
     Route::get('/invoices/{filename}', function ($filename) {
         $path = storage_path('app/invoice/' . $filename);

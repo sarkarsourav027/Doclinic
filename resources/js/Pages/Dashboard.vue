@@ -59,7 +59,7 @@ watch(search, (value) => {
 
         <div class="flex flex-wrap">
             <Link :href="route('clinical-test.index')" class="w-full xl:w-1/4 p-4 cursor-pointer">
-                <div class="bg-indigo-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="background-primary-t p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <h4 class="text-lg font-semibold mb-2">Clinical Test</h4>
                     <div class="flex justify-between items-center">
                         <div>
@@ -70,7 +70,7 @@ watch(search, (value) => {
                 </div>
             </Link>
             <Link :href="route('doctor.index')" class="w-full xl:w-1/4 p-4 cursor-pointer">
-                <div class="bg-yellow-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="background-primary-t p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <h4 class="text-lg font-semibold mb-2">Total Doctors</h4>
                     <div class="flex justify-between items-center">
                         <div>
@@ -81,7 +81,7 @@ watch(search, (value) => {
                 </div>
             </Link>
             <Link :href="route('patient.index')" class="w-full xl:w-1/4 p-4 cursor-pointer">
-                <div class="bg-blue-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="background-primary-t p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <h4 class="text-lg font-semibold mb-2">Total Patients</h4>
                     <div class="flex justify-between items-center">
                         <div>
@@ -92,7 +92,7 @@ watch(search, (value) => {
                 </div>
             </Link>
             <Link :href="route('appointment.index')" class="w-full xl:w-1/4 p-4 cursor-pointer">
-                <div class="bg-green-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="background-primary-t     p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <h4 class="text-lg font-semibold mb-2">Today's Appointments</h4>
                     <div class="flex justify-between items-center">
                         <div>

@@ -148,8 +148,8 @@ const copyText = (link) => {
                                         <ClNoteEdit/>&nbsp;Edit
                                     </LinkPrimaryButton>
                                     <LinkPrimaryButton
-                                        :route-name="route('billing.create',{ appointment_id: item.id })">
-                                        <UnInvoice/>&nbsp;Bill
+                                        :route-name="route('invoice.create',{ appointment_id: item.id })">
+                                        <UnInvoice/>&nbsp;Invoice
                                     </LinkPrimaryButton>
                                 </TableCell>
                             </TableRow>

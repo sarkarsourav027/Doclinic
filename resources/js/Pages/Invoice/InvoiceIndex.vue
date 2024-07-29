@@ -21,14 +21,14 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    billings: {
+    invoices: {
         type: Object,
         required: true,
     },
 })
 let search = ref(props.filters?.search);
 watch(search, (value) => {
-    router.get(route('invoice.index'), {search: value}, {
+    router.get(route('regular-invoice.index'), {search: value}, {
         preserveState: true,
         replace: true,
     });
@@ -74,8 +74,8 @@ const copyText = (link) => {
                     placeholder="Search"
                     type="text"/>
                 <div class="flex items-center gap-2">
-                    <LinkPrimaryButton :route-name="route('appointment.index')">
-                        <AkPlus/>&nbsp;Invoice From Appointment
+                    <LinkPrimaryButton :route-name="route('regular-invoice.create')">
+                        <AkPlus/>&nbsp;New Invoice
                     </LinkPrimaryButton>
                 </div>
             </div>
@@ -87,15 +87,12 @@ const copyText = (link) => {
                     <TableHead class="whitespace-nowrap">
                         <TableHeadCell> #</TableHeadCell>
                         <TableHeadCell> Invoice Number</TableHeadCell>
-                        <TableHeadCell> Patient</TableHeadCell>
-                        <TableHeadCell> Doctor</TableHeadCell>
-                        <TableHeadCell>Clinical Test</TableHeadCell>
                         <TableHeadCell>Test Fees</TableHeadCell>
                         <TableHeadCell> Invoice Amount</TableHeadCell>
                     </TableHead>
                     <TableBody>
-                        <template v-if="billings?.data?.length">
-                            <TableRow v-for="(item,key) in billings.data" :key="item.id">
+                        <template v-if="invoices?.data?.length">
+                            <TableRow v-for="(item,key) in invoices.data" :key="item.id">
                                 <TableCell> {{ key + 1 }}</TableCell>
                                 <TableCell class="whitespace-nowrap">
                                     <div class="flex items-center">
@@ -116,46 +113,8 @@ const copyText = (link) => {
                                     </div>
 
                                 </TableCell>
-                                <TableCell>
-                                    <div class="flex gap-1">
-                                          <span class="flex flex-wrap items-center gap-2 w-10">
-                                            <img
-                                                :src="`https://ui-avatars.com/api/?name=${(item?.appointment?.patient?.name ?? 'John')}`"
-                                                alt="Patient Image" class="w-8 rounded-full">
-                                          </span>
-                                        <span class="text-left whitespace-nowrap">
-                                            <p class="text-black">{{ item?.appointment?.patient?.name }}</p>
-                                            <p class="text-black">{{ item?.appointment?.patient?.phone_number }}</p>
-                                      </span>
-                                    </div>
-                                </TableCell>
-                                <TableCell class="whitespace-nowrap">
-                                    <div class="flex gap-1">
-                                          <span class="flex flex-wrap items-center gap-2 w-10">
-                                            <img
-                                                :src="item?.appointment?.doctor?.avatar && item?.appointment?.doctor?.avatar !== '' ? item?.appointment?.doctor?.avatar  : `https://ui-avatars.com/api/?name=${(item?.doctor?.name ?? 'John')}`"
-                                                alt="Doctor Image" class="w-8 rounded-full">
-                                          </span>
-                                        <span class="text-left whitespace-nowrap">
-                                            <p class="text-black">{{ item?.appointment?.doctor?.name }}</p>
-                                            <p class="text-black">{{ item?.appointment?.doctor?.phone_number }}</p>
-                                            <p class="text-amber-400 uppercase">{{ item?.appointment?.doctor?.doctor_type }}</p>
-                                            <p class="uppercase"><CurrencySymbol/>{{ item.doctor_fees }}</p>
-                                      </span>
-                                    </div>
-                                </TableCell>
-                                <TableCell class="whitespace-nowrap">
-                                    <span v-if="item?.appointment?.clinical_test?.length">
-                                        <span v-for="test in item?.appointment?.clinical_test" :key="test.id">
-                                            <Badge class="background-primary-t">
-                                                {{ test.name }}
-                                            </Badge>
-                                        </span>
-                                    </span>
-                                    <span v-else>NA</span>
-                                </TableCell>
                                 <TableCell class="whitespace-nowrap"><CurrencySymbol/>{{ item.clinical_test_amount }}</TableCell>
-                                <TableCell class="whitespace-nowrap"><CurrencySymbol/>{{ item.billing_amount }}</TableCell>
+                                <TableCell class="whitespace-nowrap"><CurrencySymbol/>{{ item.invoice_amount }}</TableCell>
                             </TableRow>
                         </template>
                         <template v-else>
@@ -168,7 +127,7 @@ const copyText = (link) => {
                     </TableBody>
                 </Table>
             </div>
-            <Pagination :links="billings.meta"/>
+            <Pagination :links="invoices.meta"/>
         </div>
     </AuthenticatedLayout>
 </template>

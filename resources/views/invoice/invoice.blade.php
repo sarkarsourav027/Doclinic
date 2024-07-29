@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Invoice</title>
+    <title>Invoice</title>
 
     <style>
         body {
@@ -129,6 +129,12 @@
             <td>Item</td>
             <td>Amount (₹)</td>
         </tr>
+        @foreach($clinical_test as $test)
+            <tr class='total'>
+                <td>{{$test->name}}</td>
+                <td>₹{{number_format($test->amount, 2)}}</td>
+            </tr>
+        @endforeach
         <tr class='total'>
             <td>Total Test Amount:</td>
             <td>₹{{number_format($clinical_test_amount, 2)}}</td>
@@ -148,7 +154,7 @@
         </tr>
         <tr class='total'>
             <td style='font-size: 15px; color: #3a86ff;'><strong>Net Amount:</strong></td>
-            <td style='font-size: 15px; color: #3a86ff;'><strong>₹{{$billing_amount}}</strong></td>
+            <td style='font-size: 15px; color: #3a86ff;'><strong>₹{{number_format($billing_amount, 2)}}</strong></td>
         </tr>
     </table>
     <p style='font-size:12px; text-align:right;'>{{$billing_amount_in_word}} Rupees

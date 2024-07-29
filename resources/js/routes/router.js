@@ -16,49 +16,73 @@ const navigation = reactive([
         label: "Dashboard",
         component: 'dashboard',
         icon: RaDashboard,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin','Office Staff','Office Executive','Manager']
     },
     {
         route: "clinical-test.index",
         label: "Clinical Test",
         component: 'clinical-test',
         icon: IoOutlineFlask,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin','Office Staff','Office Executive','Manager']
     },
     {
         route: "doctor.index",
         label: "Doctor",
         component: 'doctor',
         icon: CaStethoscope,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin','Office Staff','Office Executive','Manager']
     },
     {
         route: "patient.index",
         label: "Patient",
         component: 'patient',
         icon: LiWheelchair,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin','Office Staff','Office Executive','Manager']
     },
     {
         route: "appointment.index",
         label: "Appointment",
         component: 'appointment',
         icon: BsPlusSquare,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin','Office Staff','Office Executive','Manager']
     },
     {
-        route: "billing.index",
-        label: "Billing",
-        component: 'billing',
+        route: "#",
+        label: "Invoice",
+        component: '',
         icon: AkCreditCard,
-        isOpen: false
+        isOpen: false,
+        children: [
+            {
+                route: "invoice.index",
+                label: "Appointment Invoice",
+                component: 'billing',
+                icon: AkCreditCard,
+                isOpen: false,
+                roles: ['Admin','Office Staff','Office Executive','Manager']
+            },
+            {
+                route: "regular-invoice.index",
+                label: "Regular Invoice",
+                component: 'invoice',
+                icon: AkCreditCard,
+                isOpen: false,
+                roles: ['Admin','Office Staff','Office Executive','Manager']
+            },
+        ]
     },
     {
         route: "account.index",
         label: "Accounts",
         component: 'account',
         icon: CdAccount,
-        isOpen: false
+        isOpen: false,
+        roles: ['Admin']
     },
     /*{
         route: "#",

@@ -6,7 +6,6 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import navigation from "@/routes/router";
 import {FaAngleDown, FaAngleRight, FaBarsStaggered} from "@/utils/icons";
-import {toast} from "vue3-toastify";
 
 const props = defineProps({
     title: String,
@@ -71,6 +70,7 @@ const toggleDropdown = (label) => {
                             <ul v-if="link.isOpen" class="pl-4">
                                 <li v-for="child in link.children" :key="child.label" class="mb-0.5">
                                     <Link
+                                        v-if="child.roles.includes(authUser?.designation)"
                                         :class="{ 'text-white selection-link': route().current(child.route)}"
                                         :href="route(child.route)"
                                         class="px-4 py-3 hover:text-white hover:selection-link rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer">
@@ -81,6 +81,7 @@ const toggleDropdown = (label) => {
                             </ul>
                         </div>
                         <Link v-else
+                              v-if="link.roles.includes(authUser?.designation)"
                               :class="{ 'text-white selection-link': route().current(link.route)}"
                               :href="route(link.route)"
                               class="px-4 py-3 hover:text-white hover:selection-link rounded-md flex items-center gap-2 font-medium text-sm cursor-pointer"
@@ -100,6 +101,13 @@ const toggleDropdown = (label) => {
                     <button @click="sideMenu()">
                         <FaBarsStaggered/>
                     </button>
+                    <div class="flex items-center gap-3">
+                        <img :src="`https://ui-avatars.com/api/?name=${(authUser?.name ?? 'John')}`" alt="" class="w-10 h-10 rounded">
+                        <div class="">
+                            <p class="text-sm leading-3 font-medium text-[#475569] hidden lg:block">Hello Clinic</p>
+                            <span class="text-xs leading-3 text-[#475569] font-medium">{{ authUser?.designation }}</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="">
                     <ul class="flex items-center gap-4 lg:gap-6">

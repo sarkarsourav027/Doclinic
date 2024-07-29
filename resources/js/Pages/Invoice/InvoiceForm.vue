@@ -22,12 +22,9 @@ import DangerButton from "@/Components/Buttons/DangerButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 
 const isGstBill = ref(false);
-const isAddDoctorFees = ref(false);
 const props = defineProps({
-    appointments: {type: Object, require: true},
     select_clinical_tests: {type: Object, require: true},
     clinical_tests: {type: Object, require: true},
-    appointment: {type: Object, require: true},
 });
 
 const totalBillingAmount = ref(0);
@@ -35,25 +32,18 @@ const clinicalTestTotalAmount = ref(0);
 const givenGstPercentage = ref(0);
 const gstAmountAfterSelectGst = ref(0);
 
-const form = useForm("post", route("invoice.store"), {
-    appointment: {
-        id:props?.appointment?.data?.id,
-        appointment_id: props?.appointment?.data?.appointment_id
-    } ?? {},
-    name: props?.appointment?.data?.patient?.name ?? '',
-    phone_number: props?.appointment?.data?.patient?.phone_number ?? '',
+const form = useForm("post", route("regular-invoice.store"), {
+    name: '',
+    phone_number: '',
     email: '',
     address: '',
-    billing_date: '',
+    invoice_date: '',
     payment_mode: '',
     is_gst_bill: false,
-    is_add_doctor_fees: false,
     gst_percentage: 0,
-    doctor_name: '',
-    doctor_fees: 0,
     clinical_test_amount: clinicalTestTotalAmount.value ?? 0,
     gst_amount: gstAmountAfterSelectGst.value ?? 0,
-    billing_amount: totalBillingAmount.value ?? 0,
+    invoice_amount: totalBillingAmount.value ?? 0,
     clinical_test_information: [{test_id: null, amount: null}],
 });
 
@@ -62,27 +52,14 @@ const formConfig = {
     preserveScroll: true,
     onBefore: () => {
         form.clinical_test_amount = clinicalTestTotalAmount.value;
-        form.billing_amount = totalBillingAmount.value;
+        form.invoice_amount = totalBillingAmount.value;
         form.gst_amount = gstAmountAfterSelectGst.value;
     },
     onSuccess: (page) => {
         form.reset();
-        toast(props?.appointment?.data?.id ? "Invoice updated successfully." : "Invoice added successfully.", {type: 'success'});
+        toast("Invoice added successfully.", {type: 'success'});
     }
 };
-/*const handleAppointmentSelect = (event) => {
-
-    router.reload({
-        only: ['appointment'], data: {appointment_id: event.id, partial: true}, onSuccess: (page) => {
-            const appointment = page.props?.appointment?.data
-            form.name = appointment.patient?.name
-            form.phone_number = appointment?.patient?.phone_number
-            form.doctor_name = appointment?.doctor?.name ?? ''
-            form.doctor_fees = appointment?.doctor?.fees ?? ''
-            totalBillingAmount.value = parseFloat(clinicalTestTotalAmount.value) + parseFloat(form.doctor_fees)
-        }
-    })
-};*/
 const updateBillingAmounts = () => {
     clinicalTestTotalAmount.value = form.clinical_test_information.reduce((sum, item) => {
         const amount = parseFloat(item.amount);
@@ -93,7 +70,7 @@ const updateBillingAmounts = () => {
     totalBillingAmount.value = clinicalTestTotalAmount.value + gstAmountAfterSelectGst.value + parseFloat(form.doctor_fees || 0);
 
     form.clinical_test_amount = clinicalTestTotalAmount.value;
-    form.billing_amount = totalBillingAmount.value;
+    form.invoice_amount = totalBillingAmount.value;
     form.gst_amount = gstAmountAfterSelectGst.value;
 };
 
@@ -104,19 +81,6 @@ const handleGstBillCheck = (e) => {
         givenGstPercentage.value = 0;
         form.gst_percentage = 0;
         form.gst_amount = 0;
-        updateBillingAmounts();
-    }
-};
-
-const handleDoctorFeesCheck = (e) => {
-    isAddDoctorFees.value = e;
-    if (!e) {
-        form.doctor_name = ''
-        form.doctor_fees = 0
-        updateBillingAmounts();
-    } else {
-        form.doctor_name = props?.appointment?.data?.doctor?.name
-        form.doctor_fees = props?.appointment?.data?.doctor?.fees
         updateBillingAmounts();
     }
 };
@@ -169,14 +133,6 @@ const handleChangeGstPercentage = (event) => {
                 >
                     <section>
                         <form class="mt-2" @submit.prevent="form.submit(formConfig)">
-                            <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5 mb-4">
-                                <div class="mb-2">
-                                    <InputLabel :is-require="true" class="mb-2" for="appointment"
-                                                value="Appointment Id"/>
-                                    <span class="text-2xl">{{ form.appointment.appointment_id }}</span>
-                                    <InputError :message="form.errors.appointment" class="mt-2"/>
-                                </div>
-                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
                                 <div class="mb-2">
                                     <InputLabel :is-require="true" for="name" value="Patient Name"/>
@@ -186,7 +142,6 @@ const handleChangeGstPercentage = (event) => {
                                         v-model="form.name"
                                         autocomplete="name"
                                         class="mt-1 block w-full"
-                                        readonly
                                         type="text"
                                     />
 
@@ -200,7 +155,6 @@ const handleChangeGstPercentage = (event) => {
                                         v-model="form.phone_number"
                                         autocomplete="phone_number"
                                         class="mt-1 block w-full"
-                                        readonly
                                         type="text"
                                     />
 
@@ -236,18 +190,18 @@ const handleChangeGstPercentage = (event) => {
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-5 mb-4">
                                 <div class="mb-2">
-                                    <InputLabel :is-require="true" for="billing_date" value="Invoice Date"/>
+                                    <InputLabel :is-require="true" for="invoice_date" value="Invoice Date"/>
 
                                     <TextInput
-                                        id="billing_date"
-                                        v-model="form.billing_date"
-                                        autocomplete="billing_date"
+                                        id="invoice_date"
+                                        v-model="form.invoice_date"
+                                        autocomplete="invoice_date"
                                         autofocus
                                         class="mt-1 block w-full"
                                         type="date"
                                     />
 
-                                    <InputError :message="form.errors.billing_date" class="mt-2"/>
+                                    <InputError :message="form.errors.invoice_date" class="mt-2"/>
                                 </div>
                                 <div class="mb-2">
                                     <InputLabel :is-require="true" for="payment_mode" value="Payment Mode"/>
@@ -288,43 +242,6 @@ const handleChangeGstPercentage = (event) => {
                                     />
 
                                     <InputError :message="form.errors.gst_percentage" class="mt-2"/>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mb-4">
-                                <div class="mb-2">
-                                    <InputLabel :is-require="false" for="is_add_doctor_fees" value="Doctor"/>
-                                    <Checkbox v-model:checked="form.is_add_doctor_fees" class="cursor-pointer"
-                                              name="is_add_doctor_fees"
-                                              @update:checked="handleDoctorFeesCheck"/>
-                                    <InputError :message="form.errors.is_add_doctor_fees" class="mt-2"/>
-                                </div>
-                                <div v-if="isAddDoctorFees" class="mb-2">
-                                    <InputLabel :is-require="true" for="doctor_name" value="Doctor Name"/>
-
-                                    <TextInput
-                                        id="doctor_name"
-                                        v-model="form.doctor_name"
-                                        autocomplete="doctor_name"
-                                        class="mt-1 block w-full"
-                                        readonly
-                                        type="text"
-                                    />
-
-                                    <InputError :message="form.errors.doctor_name" class="mt-2"/>
-                                </div>
-                                <div v-if="isAddDoctorFees" class="mb-2">
-                                    <InputLabel :is-require="true" for="doctor_fees" value="Doctor Fees"/>
-
-                                    <TextInput
-                                        id="doctor_fees"
-                                        v-model="form.doctor_fees"
-                                        autocomplete="doctor_fees"
-                                        class="mt-1 block w-full"
-                                        readonly
-                                        type="text"
-                                    />
-
-                                    <InputError :message="form.errors.doctor_fees" class="mt-2"/>
                                 </div>
                             </div>
                             <div class="flex flex-wrap -mx-3 mb-4">
@@ -376,6 +293,7 @@ const handleChangeGstPercentage = (event) => {
                                                     <TableCell
                                                         class="text-right w-2">
                                                         <DangerButton
+                                                            v-if="form.clinical_test_information.length > 1"
                                                             type="button"
                                                             @click="removeRow(index)"
                                                         >Remove
