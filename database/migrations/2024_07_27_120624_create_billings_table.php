@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('client_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('invoice_number');
             $table->foreignId('appointment_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('billing_date');

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         if (config('app.env') === 'local'){
+            $this->call(ClientSeeder::class);
             $this->call(UserSeeder::class);
             $this->call(ClinicalTestSeeder::class);
             $this->call(DoctorSeeder::class);

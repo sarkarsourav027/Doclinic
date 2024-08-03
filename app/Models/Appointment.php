@@ -11,7 +11,7 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['appointment_id','doctor_id', 'patient_id', 'appointment_date'];
+    protected $fillable = ['client_id','appointment_id','doctor_id', 'patient_id', 'appointment_date'];
     protected $casts = [
         'appointment_date' => 'date:Y-m-d'
     ];
@@ -47,5 +47,9 @@ class Appointment extends Model
     public function clinicalTests(): BelongsToMany
     {
         return $this->belongsToMany(ClinicalTest::class)->withTimestamps();
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

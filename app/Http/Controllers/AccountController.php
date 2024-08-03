@@ -19,6 +19,8 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         $accounts = User::query()
+            ->where('client_id',$request->user()->client_id)
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->filter($request->only('search'))
             ->paginate(config('basicSetting.paginate'))
@@ -34,9 +36,12 @@ class AccountController extends Controller
      */
     public function create()
     {
-        $accountDesignation = AccountDesignation::getValues();
+        $accountDesignations = AccountDesignation::getValues();
+        $filteredDesignations = array_filter($accountDesignations, function ($designation) {
+            return $designation !== AccountDesignation::SUPER_ADMIN->value;
+        });
         return Inertia::render('Account/AccountForm', [
-            'accountDesignation' => $accountDesignation,
+            'accountDesignation' => $filteredDesignations,
         ]);
     }
 
@@ -46,7 +51,7 @@ class AccountController extends Controller
     public function store(StoreUserRequest $request)
     {
         User::create([
-            'parent_id' => $request->user()->id,
+            'client_id' => $request->user()->client_id,
             'designation' => $request->input('designation'),
             'name' => $request->input('name'),
             'email' => $request->input('email'),

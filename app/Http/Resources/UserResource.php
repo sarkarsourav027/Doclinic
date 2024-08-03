@@ -16,7 +16,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->when($this->id, $this->id),
-            'parent_id' => $this->when($this->parent_id, $this->parent_id),
+            'client_id' => $this->when($this->client_id, $this->client_id),
             'designation' => $this->when($this->designation, $this->designation),
             'name' => $this->when($this->name, $this->name),
             'email' => $this->when($this->email, $this->email),

@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 use Inertia\Inertia;
@@ -22,6 +23,7 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         $invoices = Invoice::query()
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->filter($request->only('search'))
             ->paginate(config('basicSetting.paginate'))
@@ -68,6 +70,7 @@ class InvoiceController extends Controller
 
             $mpdf->imageVars['logo'] = file_get_contents(public_path('assets/logo-letter.png'));
             $mpdf->WriteHTML(view('invoice.invoice', [
+                'client' => $request->user()->client,
                 'invoice_number' => $invoice_number,
                 'billing_date' => $billing_date,
                 'patient_name' => $request->input('name'),
@@ -88,10 +91,20 @@ class InvoiceController extends Controller
             ])->render());
             $mpdf->SetHTMLFooter(view('invoice.invoice-footer')->render());
 
+            $invoiceDirectory = storage_path('app/public/invoice');
+            if (!is_dir($invoiceDirectory)) {
+                mkdir($invoiceDirectory, 0755, true);
+            }
+
+            if (!file_exists(public_path('storage'))) {
+                Artisan::call('storage:link');
+            }
+
             $invoice_file = $invoice_number . '.pdf';
             $mpdf->Output(storage_path('app/public/invoice/' . $invoice_file));
 
             Invoice::create([
+                'client_id' => $request->user()->client_id,
                 'invoice_file' => $invoice_file,
                 'invoice_number' => $invoice_number,
                 'invoice_date' => $billing_date,

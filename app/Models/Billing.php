@@ -10,7 +10,7 @@ class Billing extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['invoice_number','invoice_file','appointment_id', 'billing_date', 'doctor_fees', 'clinical_test_amount', 'billing_amount', 'payment_mode', 'is_gst_bill', 'gst_percentage'];
+    protected $fillable = ['client_id','invoice_number','invoice_file','appointment_id', 'billing_date', 'doctor_fees', 'clinical_test_amount', 'billing_amount', 'payment_mode', 'is_gst_bill', 'gst_percentage'];
 
     protected $casts = [
         'is_gst_bill' => 'boolean',
@@ -31,5 +31,9 @@ class Billing extends Model
                 $query->onlyTrashed();
             }
         });
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

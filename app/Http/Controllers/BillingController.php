@@ -11,6 +11,7 @@ use App\Http\Requests\StoreBillingRequest;
 use App\Http\Requests\UpdateBillingRequest;
 use App\Models\ClinicalTest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 use Inertia\Inertia;
@@ -24,6 +25,7 @@ class BillingController extends Controller
     public function index(Request $request)
     {
         $billings = Billing::query()
+            ->where('client_id',$request->user()->client_id)
             ->with(['appointment', 'appointment.doctor', 'appointment.patient', 'appointment.clinicalTests'])
             ->latest()
             ->filter($request->only('search'))
@@ -80,6 +82,7 @@ class BillingController extends Controller
 
             $mpdf->imageVars['logo'] = file_get_contents(public_path('assets/logo-letter.png'));
             $mpdf->WriteHTML(view('invoice.invoice', [
+                'client' => $request->user()->client,
                 'invoice_number' => $invoice_number,
                 'billing_date' => $billing_date,
                 'patient_name' => $request->input('name'),
@@ -100,10 +103,20 @@ class BillingController extends Controller
             ])->render());
             $mpdf->SetHTMLFooter(view('invoice.invoice-footer')->render());
 
+            $billingDirectory = storage_path('app/public/invoice');
+            if (!is_dir($billingDirectory)) {
+                mkdir($billingDirectory, 0755, true);
+            }
+
+            if (!file_exists(public_path('storage'))) {
+                Artisan::call('storage:link');
+            }
+
             $invoice_file = $invoice_number . '.pdf';
             $mpdf->Output(storage_path('app/public/invoice/' . $invoice_file));
 
             Billing::create([
+                'client_id' => $request->user()->client_id,
                 'invoice_file' => $invoice_file,
                 'invoice_number' => $invoice_number,
                 'appointment_id' => $appointmentId,

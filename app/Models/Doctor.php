@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Doctor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_type', 'name', 'phone_number', 'available_days','fees', 'avatar'];
+    protected $fillable = ['client_id','doctor_type', 'name', 'phone_number', 'available_days','fees', 'avatar'];
     protected $casts = [
         'available_days' => 'array'
     ];
@@ -28,5 +29,9 @@ class Doctor extends Model
                 $query->onlyTrashed();
             }
         });
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

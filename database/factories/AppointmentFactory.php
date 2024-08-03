@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'client_id' => Client::inRandomOrder()->first()->id,
             'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
             'doctor_id' => Doctor::inRandomOrder()->first()->id,
             'patient_id' => Patient::inRandomOrder()->first()->id,

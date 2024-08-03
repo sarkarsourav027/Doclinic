@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('client_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('invoice_number');
             $table->date('invoice_date');
             $table->decimal('clinical_test_amount',18,2);

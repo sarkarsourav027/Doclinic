@@ -18,6 +18,7 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $patient = Patient::query()
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->filter($request->only('search'))
             ->paginate(config('basicSetting.paginate'))

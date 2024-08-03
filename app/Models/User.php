@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'parent_id',
+        'client_id',
         'designation',
         'phone_number',
     ];
@@ -64,8 +64,8 @@ class User extends Authenticatable
         });
     }
 
-    public function parent(): BelongsTo
+    public function client(): BelongsTo
     {
-        return $this->belongsTo(self::class, 'parent_id');
+        return $this->belongsTo(Client::class);
     }
 }

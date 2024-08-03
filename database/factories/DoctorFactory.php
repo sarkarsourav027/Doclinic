@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\DaysOfWeek;
 use App\Enums\DoctorType;
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
+            'client_id' => Client::inRandomOrder()->first()->id,
             'doctor_type' => $this->faker->randomElement(DoctorType::class),
             'name' => fake()->name(),
             'phone_number' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 10),

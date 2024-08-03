@@ -19,6 +19,7 @@ class DoctorController extends Controller
     public function index(Request $request)
     {
         $doctor = Doctor::query()
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->filter($request->only('search'))
             ->paginate(config('basicSetting.paginate'))
@@ -51,7 +52,8 @@ class DoctorController extends Controller
     public function store(StoreDoctorRequest $request)
     {
         $request['available_days'] = collect($request->input('available_days'))->pluck('name')->toArray();
-        Doctor::create($request->only(['doctor_type','name','phone_number','available_days','fees']));
+        $request['client_id'] = $request->user()->client_id;
+        Doctor::create($request->only(['client_id','doctor_type','name','phone_number','available_days','fees']));
         return redirect()->route('doctor.index');
     }
 

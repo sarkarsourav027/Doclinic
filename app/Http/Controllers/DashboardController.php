@@ -18,11 +18,12 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $clinical_test_count = ClinicalTest::query()->count();
-        $doctors = Doctor::query()->count();
-        $patients = Patient::query()->count();
-        $today_appointment_count = Appointment::query()->latest()->whereDate('appointment_date', Carbon::today())->count();
+        $clinical_test_count = ClinicalTest::query()->where('client_id',$request->user()->client_id)->count();
+        $doctors = Doctor::query()->where('client_id',$request->user()->client_id)->count();
+        $patients = Patient::query()->where('client_id',$request->user()->client_id)->count();
+        $today_appointment_count = Appointment::query()->where('client_id',$request->user()->client_id)->latest()->whereDate('appointment_date', Carbon::today())->count();
         $today_appointment = Appointment::query()
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->with(['doctor','patient'])
             ->filter($request->only('search'))

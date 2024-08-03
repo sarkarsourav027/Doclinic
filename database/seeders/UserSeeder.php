@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\AccountDesignation;
 use App\Enums\UserType;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -17,14 +18,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Xeuix',
-            'designation' => AccountDesignation::ADMIN,
-            'email' => 'admin@xeuix.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
+        User::factory()->createMany([
+            /*[
+                'name' => 'Xeuix',
+                'designation' => AccountDesignation::SUPER_ADMIN,
+                'email' => 'admin@xeuix.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ],*/
+            [
+                'client_id' => Client::inRandomOrder()->first()->id,
+                'name' => 'Jasoda Health Care',
+                'email' => 'jasodahealthcare@gmail.com',
+                'phone_number' => '9439163363',
+                'designation' => AccountDesignation::ADMIN,
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]]);
 
         //User::factory(50)->create();
     }

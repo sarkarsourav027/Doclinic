@@ -104,7 +104,7 @@ const toggleDropdown = (label) => {
                     <div class="flex items-center gap-3">
                         <img :src="`https://ui-avatars.com/api/?name=${(authUser?.name ?? 'John')}`" alt="" class="w-10 h-10 rounded">
                         <div class="">
-                            <p class="text-sm leading-3 font-medium text-[#475569] hidden lg:block">Hello Clinic</p>
+                            <p class="text-sm leading-3 font-medium text-[#475569] hidden lg:block">{{authUser?.client?.name}}</p>
                             <span class="text-xs leading-3 text-[#475569] font-medium">{{ authUser?.designation }}</span>
                         </div>
                     </div>

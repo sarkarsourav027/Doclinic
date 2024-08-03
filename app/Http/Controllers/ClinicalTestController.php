@@ -16,6 +16,7 @@ class ClinicalTestController extends Controller
     public function index(Request $request)
     {
         $clinical_test = ClinicalTest::query()
+            ->where('client_id',$request->user()->client_id)
             ->latest()
             ->filter($request->only('search'))
             ->paginate(config('basicSetting.paginate'))
@@ -39,7 +40,11 @@ class ClinicalTestController extends Controller
      */
     public function store(StoreClinicalTestRequest $request)
     {
-        ClinicalTest::create($request->validated());
+
+        $request->merge([
+            'client_id' => $request->user()->client_id,
+        ]);
+        ClinicalTest::create($request->all());
         return redirect()->route('clinical-test.index');
     }
 

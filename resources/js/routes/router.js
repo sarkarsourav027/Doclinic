@@ -17,7 +17,7 @@ const navigation = reactive([
         component: 'dashboard',
         icon: RaDashboard,
         isOpen: false,
-        roles: ['Admin','Office Staff','Office Executive','Manager']
+        roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
     },
     {
         route: "clinical-test.index",
@@ -25,7 +25,7 @@ const navigation = reactive([
         component: 'clinical-test',
         icon: IoOutlineFlask,
         isOpen: false,
-        roles: ['Admin','Office Staff','Office Executive','Manager']
+        roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
     },
     {
         route: "doctor.index",
@@ -33,7 +33,7 @@ const navigation = reactive([
         component: 'doctor',
         icon: CaStethoscope,
         isOpen: false,
-        roles: ['Admin','Office Staff','Office Executive','Manager']
+        roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
     },
     {
         route: "patient.index",
@@ -41,7 +41,7 @@ const navigation = reactive([
         component: 'patient',
         icon: LiWheelchair,
         isOpen: false,
-        roles: ['Admin','Office Staff','Office Executive','Manager']
+        roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
     },
     {
         route: "appointment.index",
@@ -49,7 +49,7 @@ const navigation = reactive([
         component: 'appointment',
         icon: BsPlusSquare,
         isOpen: false,
-        roles: ['Admin','Office Staff','Office Executive','Manager']
+        roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
     },
     {
         route: "#",
@@ -64,7 +64,7 @@ const navigation = reactive([
                 component: 'billing',
                 icon: AkCreditCard,
                 isOpen: false,
-                roles: ['Admin','Office Staff','Office Executive','Manager']
+                roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
             },
             {
                 route: "regular-invoice.index",
@@ -72,7 +72,7 @@ const navigation = reactive([
                 component: 'invoice',
                 icon: AkCreditCard,
                 isOpen: false,
-                roles: ['Admin','Office Staff','Office Executive','Manager']
+                roles: ['SUPER_ADMIN','ADMIN','OFFICE_STAFF','OFFICE_EXECUTIVE','MANAGER']
             },
         ]
     },
@@ -82,7 +82,7 @@ const navigation = reactive([
         component: 'account',
         icon: CdAccount,
         isOpen: false,
-        roles: ['Admin']
+        roles: ['SUPER_ADMIN','ADMIN']
     },
     /*{
         route: "#",

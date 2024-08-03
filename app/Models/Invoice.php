@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['invoice_number', 'invoice_date', 'clinical_test_amount', 'invoice_amount', 'payment_mode', 'is_gst_bill', 'gst_percentage', 'invoice_file'];
+    protected $fillable = ['client_id','invoice_number', 'invoice_date', 'clinical_test_amount', 'invoice_amount', 'payment_mode', 'is_gst_bill', 'gst_percentage', 'invoice_file'];
 
     protected $casts = [
         'is_gst_bill' => 'boolean',
@@ -33,5 +34,9 @@ class Invoice extends Model
                 $query->onlyTrashed();
             }
         });
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

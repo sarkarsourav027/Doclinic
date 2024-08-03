@@ -87,8 +87,9 @@
                 <table>
                     <tr>
                         <td class='title'>
-                            <img src="var:logo" style='width: 100%; max-width: 100px;'>
-                            <p style='font-size:20px;'>TheraConnect</p>
+                            {{$client->name}}
+                            {{--<img src="var:logo" style='width: 100%; max-width: 100px;'>
+                            <p style='font-size:20px;'>TheraConnect</p>--}}
                         </td>
                         <td>
                             <p style='font-size:40px; font-weight:bold; color:#3a86ff;'>INVOICE</p>
@@ -115,11 +116,11 @@
                         </td>
                         <td style='text-align:left; padding-left:200px;'>
                             <span style='font-weight:bold; color:#3a86ff;'>Bill From:</span><br>
-                            Jasodha Health Clinic<br>
-                            9830619165<br>
-                            jasodahealthcare@gmail.com<br>
-                            Dumdum<br>
-                            GST: 19EJDPS4723L
+                            {{$client->name}}<br>
+                            {{$client->phone_number}}<br>
+                            {{$client->email}}<br>
+                            {{$client->address}}<br>
+                            GST: {{$client->gst_number}}
                         </td>
                     </tr>
                 </table>

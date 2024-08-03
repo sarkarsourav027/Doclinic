@@ -4,10 +4,11 @@ namespace App\Enums;
 
 enum AccountDesignation: string
 {
-    case ADMIN = 'Admin';
-    case OFFICE_STAFF = 'Office Staff';
-    case OFFICE_EXECUTIVE = 'Office Executive';
-    case MANAGER = 'Manager';
+    case SUPER_ADMIN = 'SUPER_ADMIN';
+    case ADMIN = 'ADMIN';
+    case OFFICE_STAFF = 'OFFICE_STAFF';
+    case OFFICE_EXECUTIVE = 'OFFICE_EXECUTIVE';
+    case MANAGER = 'MANAGER';
 
     public static function getValues(): array
     {
@@ -18,4 +19,3 @@ enum AccountDesignation: string
         return $types;
     }
 }
-

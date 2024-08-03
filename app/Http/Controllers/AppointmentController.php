@@ -6,6 +6,7 @@ use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Models\Client;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $appointment = Appointment::query()
+            ->where('client_id',$request->user()->client_id)
             ->with(['patient', 'doctor', 'clinicalTests'])
             ->latest()
             ->filter($request->only('search'))
@@ -56,11 +58,13 @@ class AppointmentController extends Controller
                     'phone_number' => $request->input('phone_number'),
                 ],
                 [
+                    'client_id' => $request->user()->client_id,
                     'patient_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
                 ]
             );
 
             Appointment::create([
+                'client_id' => $request->user()->client_id,
                 'appointment_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time(),
                 'doctor_id' => $request->input('doctor_id')['id'],
                 'patient_id' => $patient->id,
@@ -105,6 +109,7 @@ class AppointmentController extends Controller
                     'phone_number' => $request->input('phone_number'),
                 ],
                 [
+                    'client_id' => $request->user()->client_id,
                     'patient_id' => substr(str_shuffle(str_repeat('0123456789', 10)), 0, 5) . time()
                 ]
             );
